@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NutriLife Pro | ИИ-Холодильник & Баланс</title>
+    <title>NutriLife Pro | Реальный ИИ-Сканер Еды</title>
     <!-- Web App Manifest & Mobile Meta -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -47,12 +47,10 @@
             background: #10b981;
             border-radius: 2px;
         }
-        /* Быстрый отклик на нажатие для мобильных */
         .active-scale:active {
             transform: scale(0.95);
             transition: transform 0.1s ease;
         }
-        /* Анимация появления тостов */
         @keyframes slideIn {
             from { transform: translateY(100px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
@@ -60,7 +58,6 @@
         .animate-toast {
             animation: slideIn 0.3s ease-out forwards;
         }
-        /* Анимация бегущей линии сканера */
         @keyframes scanMove {
             0% { top: 0%; }
             50% { top: 100%; }
@@ -85,11 +82,13 @@
         <div id="scanner-overlay" class="hidden absolute inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center p-6">
             <div class="relative w-64 h-64 border-4 border-dashed border-emerald-500 rounded-3xl overflow-hidden flex items-center justify-center bg-slate-900/50">
                 <div class="scanner-line absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981]"></div>
-                <i class="fa-solid fa-utensils text-slate-700 text-7xl animate-pulse"></i>
+                <!-- Предпросмотр реального загруженного фото во время сканирования -->
+                <img id="scanned-image-preview" src="" class="absolute inset-0 w-full h-full object-cover opacity-70">
             </div>
             <div class="text-center mt-6 space-y-2">
                 <h4 class="text-sm font-bold text-white tracking-wider uppercase">Нейро-Сканнер</h4>
-                <p class="text-xs text-emerald-400 font-bold animate-pulse">ИИ распознает нутриенты на фото...</p>
+                <p class="text-xs text-emerald-400 font-bold animate-pulse">ИИ расшифровывает состав тарелки...</p>
+                <p class="text-[10px] text-slate-500">Определяем калорийность, белки, жиры и углеводы</p>
             </div>
         </div>
 
@@ -242,25 +241,21 @@
                   <i class="fa-solid fa-chevron-right text-white text-sm"></i>
                 </div>
 
-                <!-- Модуль ИИ-Фотосканера -->
-                <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-2xl space-y-2.5">
+                <!-- Реальный ИИ-Фотосканер (Новое!) -->
+                <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-2xl space-y-3">
                   <div class="flex items-center gap-2 text-teal-400">
                     <i class="fa-solid fa-camera text-xs"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider">Быстрый ИИ-сканер по фото</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider">Настоящий ИИ-сканер тарелки</span>
                   </div>
                   <p class="text-[10px] text-slate-400 leading-relaxed">
-                    Сделайте снимок тарелки. ИИ разберет состав и автоматически сохранит блюдо в дневник:
+                    Сфотографируйте свою настоящую тарелку с едой или загрузите фото из галереи. Наш искусственный интеллект проанализирует снимок:
                   </p>
-                  <div class="grid grid-cols-2 gap-2">
-                    <button onclick="simulateScan('salad')" class="active-scale px-3 py-2.5 bg-slate-800/80 hover:bg-slate-750 text-slate-200 rounded-xl text-left border border-slate-700/50 flex items-center justify-between transition-all">
-                      <span class="text-[11px] font-extrabold flex items-center gap-1.5"><span class="text-emerald-400">🥗</span> Зеленый Боул</span>
-                      <i class="fa-solid fa-chevron-right text-emerald-400 text-[10px]"></i>
-                    </button>
-                    <button onclick="simulateScan('burger')" class="active-scale px-3 py-2.5 bg-slate-800/80 hover:bg-slate-750 text-slate-200 rounded-xl text-left border border-slate-700/50 flex items-center justify-between transition-all">
-                      <span class="text-[11px] font-extrabold flex items-center gap-1.5"><span class="text-red-400">🍔</span> Бургер-сет</span>
-                      <i class="fa-solid fa-chevron-right text-red-400 text-[10px]"></i>
-                    </button>
-                  </div>
+                  
+                  <!-- Реальная системная кнопка выбора файлов и запуска камеры на мобильном -->
+                  <label class="active-scale w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl text-xs font-extrabold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2 cursor-pointer">
+                      <i class="fa-solid fa-camera-retro"></i> 📸 Сделать фото / Выбрать снимок
+                      <input type="file" id="real-camera-input" accept="image/*" class="hidden" onchange="handleRealImageUpload(event)">
+                  </label>
                 </div>
 
             </div>
@@ -395,10 +390,11 @@
                     </div>
                 </div>
 
+                <!-- Карточка ИИ-Анализа результатов реального фото (Новое!) -->
                 <div id="scan-result-card" class="hidden bg-slate-800/90 border border-emerald-500/30 p-4 rounded-2xl space-y-3">
                   <div class="flex items-center justify-between">
                     <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-1">
-                      <i class="fa-solid fa-expand"></i> Сканнер Тарелки
+                      <i class="fa-solid fa-brain"></i> Нейросетевой Анализ Фото
                     </span>
                     <span id="scan-rating" class="w-6 h-6 rounded-full bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center">A+</span>
                   </div>
@@ -534,6 +530,9 @@
 
     <!-- ЛОГИКА ПРИЛОЖЕНИЯ -->
     <script>
+        // Инициализация API Ключа (передается средой)
+        const apiKey = ""; 
+
         // Дефолтные настройки
         const defaultProfile = {
             name: 'Екатерина', weight: 60, height: 168, age: 27,
@@ -600,7 +599,7 @@
             if (savedIngredients) {
                 fridgeIngredients = JSON.parse(savedIngredients);
             } else {
-                fridgeIngredients = ['Яйца', 'Курица', 'Томаты']; // Стартовый набор продуктов
+                fridgeIngredients = ['Яйца', 'Курица', 'Томаты']; 
             }
 
             // Заполнение полей в интерфейсе профиля
@@ -789,7 +788,7 @@
             showNotification(`Удалено из холодильника: ${removed} 🗑️`, 'blue');
         }
 
-        // Динамический генератор рецептов на основе реального содержимого холодильника (Новое!)
+        // Динамический генератор рецептов на основе реального содержимого холодильника
         function findFridgeRecipes() {
             if (fridgeIngredients.length === 0) {
                 alert('Сначала добавьте хотя бы один продукт в холодильник!');
@@ -1024,43 +1023,151 @@
             });
         }
 
-        // Фотосканер
-        function simulateScan(dishType) {
-            const pr = {
-                salad: { name: "Зеленый боул с авокадо и киноа", calories: 340, macros: "Б: 12г | Ж: 18г | У: 24г", rating: "A+", verdict: "Превосходно! Жиры из авокадо нормализуют гормональный баланс, киноа дает долгую сытость." },
-                burger: { name: "Бургер из ресторана быстрого питания", calories: 590, macros: "Б: 26г | Ж: 34г | У: 45г", rating: "C-", verdict: "Высокая гликемическая нагрузка. Содержит трансжиры и скрытый сахар. Рекомендуем компенсировать клетчаткой." }
-            }[dishType];
+        // НАСТОЯЩИЙ ИИ-АНАЛИЗАТОР ИЗОБРАЖЕНИЙ (Новое!)
+        // Функция обработки реального загруженного файла изображения
+        function handleRealImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-            // 1. Показываем красивый оверлей сканирования
-            const scanner = document.getElementById('scanner-overlay');
-            scanner.classList.remove('hidden');
-            showNotification('Запуск ИИ-Сканирования... 📸', 'success');
+            // Выводим предпросмотр фотографии на экран
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result.split(',')[1];
+                const mimeType = file.type;
+                
+                // Показываем оверлей реального сканирования
+                const previewImg = document.getElementById('scanned-image-preview');
+                previewImg.src = e.target.result;
+                
+                const scanner = document.getElementById('scanner-overlay');
+                scanner.classList.remove('hidden');
+                
+                showNotification('Фото загружено. Подключаем ИИ-модель... 📸', 'success');
 
-            // 2. Через 1.5 секунды завершаем сканирование и переносим данные в ИИ-Помощник
-            setTimeout(() => {
-                scanner.classList.add('hidden');
+                // Передаем Base64 изображения в API Gemini для честного распознавания!
+                sendImageToGemini(base64Data, mimeType);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Запрос к API Gemini (Мультимодальное понимание картинок)
+        async function sendImageToGemini(base64Data, mimeType) {
+            // Очищаем поле ввода файлов
+            document.getElementById('real-camera-input').value = "";
+
+            const systemPrompt = `Ты профессиональный превентивный нутрициолог, диетолог и ИИ-анализатор тарелки. Твоя задача — проанализировать присланную фотографию еды и вернуть строго структурированный JSON ответ на русском языке. 
+            Структура JSON должна содержать следующие поля:
+            {
+                "name": "Название определенного блюда на фото (кратко и аппетитно)",
+                "calories": 250, // целое число калорий
+                "macros": {
+                    "p": 15, // белки в граммах (целое число)
+                    "f": 10, // жиры в граммах (целое число)
+                    "c": 30  // углеводы в граммах (целое число)
+                },
+                "rating": "A+", // Нутрициологическая оценка блюда от A+ (супер-полезно) до F (вредно)
+                "verdict": "Подробный экспертный нутрициологический анализ блюда (2-3 предложения): разбор полезных нутриентов, рекомендации по улучшению баланса и усвоению."
+            }
+            Не добавляй никакого стороннего текста вне формата JSON!`;
+
+            const promptText = "Проанализируй блюдо на этой фотографии. Дай его точные КБЖУ, оценку и развернутый вердикт нутрициолога по форме.";
+
+            const payload = {
+                contents: [{
+                    role: "user",
+                    parts: [
+                        { text: promptText },
+                        {
+                            inlineData: {
+                                mimeType: mimeType,
+                                data: base64Data
+                            }
+                        }
+                    ]
+                }],
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+                generationConfig: {
+                    responseMimeType: "application/json"
+                }
+            };
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+            // Запускаем отправку с механизмом экспоненциального бэкапа (до 5 попыток)
+            let attempts = 0;
+            let success = false;
+            let resultText = "";
+
+            while (attempts < 5 && !success) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                        success = true;
+                    } else {
+                        throw new Error(`Ошибка сервера: ${response.status}`);
+                    }
+                } catch (error) {
+                    attempts++;
+                    const delay = Math.pow(2, attempts) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+
+            // Убираем оверлей сканирования
+            document.getElementById('scanner-overlay').classList.add('hidden');
+
+            if (!success) {
+                showNotification('Не удалось связаться с ИИ. Попробуйте еще раз!', 'error');
+                return;
+            }
+
+            try {
+                // Парсим полученный от Gemini структурированный JSON
+                const parsedResult = JSON.parse(resultText);
+                
+                // Переключаем на вкладку ИИ-Помощника для красивого вывода результатов
                 switchTab('ai');
                 
                 const card = document.getElementById('scan-result-card');
                 card.classList.remove('hidden');
-                document.getElementById('scan-rating').innerText = pr.rating;
-                document.getElementById('scan-name').innerText = pr.name;
-                document.getElementById('scan-macros').innerText = pr.macros + ` | ${pr.calories} ккал`;
-                document.getElementById('scan-verdict').innerText = pr.verdict;
+                
+                document.getElementById('scan-rating').innerText = parsedResult.rating || "A";
+                document.getElementById('scan-name').innerText = parsedResult.name || "Распознанное блюдо";
+                document.getElementById('scan-macros').innerText = `${parsedResult.calories || 200} ккал | Б: ${parsedResult.macros?.p || 10}г | Ж: ${parsedResult.macros?.f || 10}г | У: ${parsedResult.macros?.c || 20}г`;
+                document.getElementById('scan-verdict').innerText = parsedResult.verdict || "ИИ успешно распознал блюдо на фотографии.";
 
+                // Кнопка добавления в дневник
                 document.getElementById('add-scanned-btn').onclick = () => {
-                    meals.push({ id: Date.now(), type: 'Обед', name: pr.name, calories: pr.calories });
-                    todayCalories += pr.calories;
+                    const mealCals = parsedResult.calories || 200;
+                    meals.push({
+                        id: Date.now(),
+                        type: 'Обед',
+                        name: parsedResult.name || "Распознанное блюдо",
+                        calories: mealCals
+                    });
+                    todayCalories += mealCals;
                     card.classList.add('hidden');
                     renderMeals(); 
                     recalculateProgress(); 
                     saveToStorage(); 
                     switchTab('tracker');
-                    showNotification(`Блюдо "${pr.name}" добавлено в дневник! 🥗`);
+                    showNotification(`Блюдо "${parsedResult.name}" добавлено в дневник! 🥗`);
                 };
 
-                showNotification('ИИ успешно расшифровал состав! 🎉');
-            }, 1800);
+                showNotification('ИИ успешно расшифровал состав снимка! 🎉');
+
+            } catch (err) {
+                showNotification('Ошибка обработки ответа ИИ. Попробуйте другое фото.', 'error');
+            }
         }
 
         // ИИ-КОНСТРУКТОР МЕНЮ
