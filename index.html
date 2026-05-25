@@ -60,6 +60,15 @@
         .animate-toast {
             animation: slideIn 0.3s ease-out forwards;
         }
+        /* Анимация бегущей линии сканера */
+        @keyframes scanMove {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+        .scanner-line {
+            animation: scanMove 2s infinite linear;
+        }
     </style>
 </head>
 <body class="h-full sm:min-h-screen flex items-center justify-center p-0 sm:p-4 text-slate-100 overflow-hidden">
@@ -67,9 +76,23 @@
     <!-- КОРПУС СМАРТФОНА С НЕОНОВОЙ ПОДСВЕТКОЙ (Адаптивный под мобильные) -->
     <div class="w-full h-full sm:h-[820px] sm:max-w-[415px] sm:rounded-[48px] bg-slate-900 sm:border-[6px] sm:border-slate-800 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden relative">
         
-        <!-- Upper Notch (Динамический Остров - скрыт на мобильных для экономии места) -->
+        <!-- Upper Notch (Динамический Остров) -->
         <div class="hidden sm:flex absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-slate-800 rounded-b-xl z-50 items-center justify-center">
             <div class="w-12 h-1 bg-black rounded-full mb-1"></div>
+        </div>
+
+        <!-- АНИМАЦИОННЫЙ СЛОЙ ИИ-СКАНЕРА (Новое!) -->
+        <div id="scanner-overlay" class="hidden absolute inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center p-6">
+            <div class="relative w-64 h-64 border-4 border-dashed border-emerald-500 rounded-3xl overflow-hidden flex items-center justify-center bg-slate-900/50">
+                <!-- Бегущая линия лазера -->
+                <div class="scanner-line absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981]"></div>
+                <!-- Иконка тарелки в фокусе -->
+                <i class="fa-solid fa-utensils text-slate-700 text-7xl animate-pulse"></i>
+            </div>
+            <div class="text-center mt-6 space-y-2">
+                <h4 class="text-sm font-bold text-white tracking-wider uppercase">Нейро-Сканнер</h4>
+                <p class="text-xs text-emerald-400 font-bold animate-pulse">ИИ распознает нутриенты на фото...</p>
+            </div>
         </div>
 
         <!-- ШАПКА ТЕЛЕФОНА -->
@@ -231,12 +254,12 @@
                     Сделайте снимок тарелки. ИИ разберет состав и автоматически сохранит блюдо в дневник:
                   </p>
                   <div class="grid grid-cols-2 gap-2">
-                    <button onclick="simulateScan('salad')" class="active-scale px-3 py-2 bg-slate-800/80 hover:bg-slate-750 text-slate-200 rounded-xl text-left border border-slate-700/50 flex items-center justify-between transition-all">
-                      <span class="text-[10px] font-bold">🥗 Зеленый Боул</span>
+                    <button onclick="simulateScan('salad')" class="active-scale px-3 py-2.5 bg-slate-800/80 hover:bg-slate-750 text-slate-200 rounded-xl text-left border border-slate-700/50 flex items-center justify-between transition-all">
+                      <span class="text-[11px] font-extrabold flex items-center gap-1.5"><span class="text-emerald-400">🥗</span> Зеленый Боул</span>
                       <i class="fa-solid fa-chevron-right text-emerald-400 text-[10px]"></i>
                     </button>
-                    <button onclick="simulateScan('burger')" class="active-scale px-3 py-2 bg-slate-800/80 hover:bg-slate-750 text-slate-200 rounded-xl text-left border border-slate-700/50 flex items-center justify-between transition-all">
-                      <span class="text-[10px] font-bold">🍔 Бургер-сет</span>
+                    <button onclick="simulateScan('burger')" class="active-scale px-3 py-2.5 bg-slate-800/80 hover:bg-slate-750 text-slate-200 rounded-xl text-left border border-slate-700/50 flex items-center justify-between transition-all">
+                      <span class="text-[11px] font-extrabold flex items-center gap-1.5"><span class="text-red-400">🍔</span> Бургер-сет</span>
                       <i class="fa-solid fa-chevron-right text-red-400 text-[10px]"></i>
                     </button>
                   </div>
@@ -811,7 +834,7 @@
                         level: "Средне",
                         cals: 320,
                         desc: "Вкусный и полезный обед со сложными углеводами.",
-                        steps: "1. Обжарите кусочки курицы с помидорами на сковороде. 2. Добавьте отварную гречку, перемешайте и потушите под крышкой на среднем огне 5 минут, чтобы крупа напиталась соком."
+                        steps: "1. Обжарите курицу с помидорами на сковороде. 2. Добавьте гречку, потушите под крышкой на медленном огне 5 минут."
                     }
                 ];
 
@@ -863,6 +886,7 @@
             document.getElementById('add-meal-form').classList.toggle('hidden');
         }
 
+        // Установка типа еды
         function setNewMealType(type) {
             currentNewMealType = type;
             ['breakfast', 'lunch', 'dinner', 'snack'].forEach(t => {
@@ -873,6 +897,7 @@
             });
         }
 
+        // Сохранение блюда
         function saveMeal() {
             const name = document.getElementById('new-meal-name').value.trim();
             const cals = parseInt(document.getElementById('new-meal-calories').value);
@@ -930,28 +955,43 @@
             });
         }
 
-        // Фотосканер
+        // Фотосканер (Добавлен эффект анимации!)
         function simulateScan(dishType) {
             const pr = {
                 salad: { name: "Зеленый боул с авокадо и киноа", calories: 340, macros: "Б: 12г | Ж: 18г | У: 24г", rating: "A+", verdict: "Превосходно! Жиры из авокадо нормализуют гормональный баланс, киноа дает долгую сытость." },
                 burger: { name: "Бургер из ресторана быстрого питания", calories: 590, macros: "Б: 26г | Ж: 34г | У: 45г", rating: "C-", verdict: "Высокая гликемическая нагрузка. Содержит трансжиры и скрытый сахар. Рекомендуем компенсировать клетчаткой." }
             }[dishType];
 
-            switchTab('ai');
-            const card = document.getElementById('scan-result-card');
-            card.classList.remove('hidden');
-            document.getElementById('scan-rating').innerText = pr.rating;
-            document.getElementById('scan-name').innerText = pr.name;
-            document.getElementById('scan-macros').innerText = pr.macros + ` | ${pr.calories} ккал`;
-            document.getElementById('scan-verdict').innerText = pr.verdict;
+            // 1. Показываем красивый оверлей сканирования
+            const scanner = document.getElementById('scanner-overlay');
+            scanner.classList.remove('hidden');
+            showNotification('Запуск ИИ-Сканирования... 📸', 'success');
 
-            document.getElementById('add-scanned-btn').onclick = () => {
-                meals.push({ id: Date.now(), type: 'Обед', name: pr.name, calories: pr.calories });
-                todayCalories += pr.calories;
-                card.classList.add('hidden');
-                renderMeals(); recalculateProgress(); saveToStorage(); switchTab('tracker');
-                showNotification(`Сканирование завершено! Блюдо добавлено 📸`);
-            };
+            // 2. Через 1.5 секунды завершаем сканирование и переносим данные в ИИ-Помощник
+            setTimeout(() => {
+                scanner.classList.add('hidden');
+                switchTab('ai');
+                
+                const card = document.getElementById('scan-result-card');
+                card.classList.remove('hidden');
+                document.getElementById('scan-rating').innerText = pr.rating;
+                document.getElementById('scan-name').innerText = pr.name;
+                document.getElementById('scan-macros').innerText = pr.macros + ` | ${pr.calories} ккал`;
+                document.getElementById('scan-verdict').innerText = pr.verdict;
+
+                document.getElementById('add-scanned-btn').onclick = () => {
+                    meals.push({ id: Date.now(), type: 'Обед', name: pr.name, calories: pr.calories });
+                    todayCalories += pr.calories;
+                    card.classList.add('hidden');
+                    renderMeals(); 
+                    recalculateProgress(); 
+                    saveToStorage(); 
+                    switchTab('tracker');
+                    showNotification(`Блюдо "${pr.name}" добавлено в дневник! 🥗`);
+                };
+
+                showNotification('ИИ успешно расшифровал состав! 🎉');
+            }, 1800);
         }
 
         // ИИ-КОНСТРУКТОР МЕНЮ
@@ -994,10 +1034,12 @@
             document.getElementById('confirm-modal').classList.remove('hidden');
         }
 
+        // Скрыть окно сброса
         function hideResetModal() {
             document.getElementById('confirm-modal').classList.add('hidden');
         }
 
+        // Подтвердить сброс
         function confirmReset() {
             localStorage.clear();
             profile = {...defaultProfile};
@@ -1009,11 +1051,6 @@
             hideResetModal();
             loadFromStorage();
             showNotification('Приложение сброшено до начальных настроек 🔄', 'blue');
-        }
-
-        // Системный сброс дня (fallback-заглушка)
-        function resetFullDay() {
-            showResetModal();
         }
 
         window.onload = () => {
