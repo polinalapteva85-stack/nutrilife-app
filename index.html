@@ -73,7 +73,7 @@
 </head>
 <body class="h-full sm:min-h-screen flex items-center justify-center p-0 sm:p-4 text-slate-100 overflow-hidden">
 
-    <!-- КОРПУС СМАРТФОНА С НЕОНОВОЙ ПОДСВЕТКОЙ (Адаптивный под мобильные) -->
+    <!-- КОРПУС СМАРТФОНА С НЕОНОВОЙ ПОДСВЕТКОЙ -->
     <div class="w-full h-full sm:h-[820px] sm:max-w-[415px] sm:rounded-[48px] bg-slate-900 sm:border-[6px] sm:border-slate-800 shadow-[0_0_50px_rgba(16,185,129,0.15)] flex flex-col overflow-hidden relative">
         
         <!-- Upper Notch (Динамический Остров) -->
@@ -81,12 +81,10 @@
             <div class="w-12 h-1 bg-black rounded-full mb-1"></div>
         </div>
 
-        <!-- АНИМАЦИОННЫЙ СЛОЙ ИИ-СКАНЕРА (Новое!) -->
+        <!-- АНИМАЦИОННЫЙ СЛОЙ ИИ-СКАНЕРА -->
         <div id="scanner-overlay" class="hidden absolute inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center p-6">
             <div class="relative w-64 h-64 border-4 border-dashed border-emerald-500 rounded-3xl overflow-hidden flex items-center justify-center bg-slate-900/50">
-                <!-- Бегущая линия лазера -->
                 <div class="scanner-line absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981]"></div>
-                <!-- Иконка тарелки в фокусе -->
                 <i class="fa-solid fa-utensils text-slate-700 text-7xl animate-pulse"></i>
             </div>
             <div class="text-center mt-6 space-y-2">
@@ -115,7 +113,7 @@
         <!-- ОПОВЕЩЕНИЯ (ТОСТЫ) -->
         <div id="toast-container" class="absolute bottom-24 left-4 right-4 z-50 pointer-events-none flex flex-col gap-2"></div>
 
-        <!-- КАСТОМНЫЙ ДИАЛОГ ПОДТВЕРЖДЕНИЯ (Замена confirm) -->
+        <!-- КАСТОМНЫЙ ДИАЛОГ ПОДТВЕРЖДЕНИЯ -->
         <div id="confirm-modal" class="hidden absolute inset-0 bg-slate-950/85 backdrop-blur-sm z-50 flex items-center justify-center p-6">
             <div class="bg-slate-900 border border-slate-800 p-5 rounded-3xl w-full max-w-xs text-center space-y-4 shadow-2xl">
                 <div class="w-12 h-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mx-auto text-xl">
@@ -149,7 +147,7 @@
                   </div>
                 </div>
 
-                <!-- Карточки Трекеров (Сетка 2х2) -->
+                <!-- Карточки Трекеров -->
                 <div class="grid grid-cols-2 gap-2.5">
                   
                   <!-- Калории -->
@@ -321,7 +319,7 @@
                 <!-- Область добавления продуктов -->
                 <div class="bg-slate-800/30 border border-slate-800 p-4 rounded-2xl space-y-3">
                     <div class="flex gap-2">
-                        <input type="text" id="ingredient-input" placeholder="Добавить продукт (например: Яйца)..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
+                        <input type="text" id="ingredient-input" placeholder="Добавить продукт (например: Лук)..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
                         <button onclick="addCustomIngredient()" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white px-3.5 rounded-xl text-xs font-bold transition-all">
                             <i class="fa-solid fa-plus"></i>
                         </button>
@@ -336,7 +334,9 @@
                             <button onclick="toggleFastIngredient('Томаты')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-pepper-hot text-red-400"></i> Томаты</button>
                             <button onclick="toggleFastIngredient('Сыр')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cheese text-amber-400"></i> Сыр</button>
                             <button onclick="toggleFastIngredient('Огурец')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-leaf text-green-400"></i> Огурец</button>
-                            <button onclick="toggleFastIngredient('Гречка')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-wheat-awn text-amber-600"></i> Гречка</button>
+                            <button onclick="toggleFastIngredient('Рис')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-bowl-rice text-indigo-400"></i> Рис</button>
+                            <button onclick="toggleFastIngredient('Молоко')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cow text-teal-400"></i> Молоко</button>
+                            <button onclick="toggleFastIngredient('Лук')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-seedling text-yellow-600"></i> Лук</button>
                         </div>
                     </div>
 
@@ -789,7 +789,7 @@
             showNotification(`Удалено из холодильника: ${removed} 🗑️`, 'blue');
         }
 
-        // Генератор рецептов по содержимому холодильника
+        // Динамический генератор рецептов на основе реального содержимого холодильника (Новое!)
         function findFridgeRecipes() {
             if (fridgeIngredients.length === 0) {
                 alert('Сначала добавьте хотя бы один продукт в холодильник!');
@@ -800,45 +800,113 @@
             output.innerHTML = `
                 <div class="p-6 text-center text-xs text-slate-400 space-y-2 animate-pulse">
                     <i class="fa-solid fa-kitchen-set text-2xl text-emerald-400 animate-bounce"></i>
-                    <p class="font-bold">ИИ собирает ингредиенты...</p>
-                    <p class="text-[9px]">Анализируем совместимость и КБЖУ</p>
+                    <p class="font-bold">ИИ составляет рецепты...</p>
+                    <p class="text-[9px]">Анализируем продукты в вашем холодильнике</p>
                 </div>
             `;
             output.classList.remove('hidden');
 
-            // Симулируем ответ ИИ на основе продуктов
+            // Симулируем интеллектуальный подбор строго по выбранным ингредиентам
             setTimeout(() => {
                 output.innerHTML = '';
                 
-                // Предустановленные комбинации для интерактивности
-                let recipes = [
+                // Переводим теги в нижний регистр для точного сравнения
+                const lowerIngredients = fridgeIngredients.map(i => i.toLowerCase());
+
+                // База возможных умных рецептов
+                const recipeDatabase = [
                     {
-                        title: "🍳 Фитнес-Яичница с томатами",
+                        title: "🍳 Пышный омлет «Нутри-Макс»",
+                        required: ["яйца"],
+                        optional: ["молоко", "томаты", "сыр", "лук"],
+                        time: "8 мин",
+                        level: "Легко",
+                        baseCals: 150,
+                        getDesc: (has) => `Нежнейший белковый омлет, приготовленный из ваших продуктов: ${has.join(', ')}.`,
+                        getSteps: (has) => `1. Взбейте яйца ${has.includes('молоко') ? 'с молоком' : 'с каплей воды'}. ${has.includes('лук') || has.includes('томаты') ? '2. Припустите нарезанные лук и томаты на сковороде 2 минуты.' : ''} 3. Вылейте яичную смесь на сковороду. ${has.includes('сыр') ? 'Посыпьте тертым сыром перед подачей.' : 'Готовьте под крышкой 5 минут.'}`
+                    },
+                    {
+                        title: "🍚 Домашний плов с нежной курочкой",
+                        required: ["курица", "рис"],
+                        optional: ["лук", "томаты"],
+                        time: "25 мин",
+                        level: "Средне",
+                        baseCals: 380,
+                        getDesc: (has) => `Сытное и богатое сложными углеводами блюдо из риса и курицы с добавлением ${has.filter(i => i !== 'курица' && i !== 'рис').join(', ')}.`,
+                        getSteps: (has) => `1. Нарежьте куриное филе кусочками и обжарьте ${has.includes('лук') ? 'с луком' : ''} до золотистой корочки. 2. Добавьте промытый рис, залейте водой в пропорции 1:2. ${has.includes('томаты') ? 'Положите кубики томатов для сочности.' : ''} 3. Тушите под закрытой крышкой на медленном огне до полного впитывания воды (15-20 минут).`
+                    },
+                    {
+                        title: "🥗 Итальянский теплый салат",
+                        required: ["томаты"],
+                        optional: ["огурец", "сыр", "лук", "курица"],
                         time: "10 мин",
                         level: "Легко",
-                        cals: 190,
-                        desc: "Идеальный белковый завтрак с сочными помидорами.",
-                        steps: "1. Мелко нарежьте помидоры и припустите на сковороде 2 минуты. 2. Взбейте яйца, залейте томаты и готовьте на медленном огне под крышкой еще 4 минуты. Посыпьте зеленью."
+                        baseCals: 120,
+                        getDesc: (has) => `Свежий, хрустящий салат на основе томатов. Вы добавили в него: ${has.join(', ')}.`,
+                        getSteps: (has) => `1. Нарежьте томаты кубиками ${has.includes('огурец') ? 'и добавьте свежий огурец' : ''}. ${has.includes('курица') ? '2. Добавьте слайсы теплой обжаренной грудки.' : ''} 3. Смешайте ингредиенты, посыпьте ${has.includes('сыр') ? 'тертым сыром' : 'зеленью'} и заправьте чайной ложкой оливкового масла.`
                     },
                     {
-                        title: "🍗 Салат «Легкость» с Курицей",
+                        title: "🍲 Быстрый рисовый суп-пюре",
+                        required: ["рис", "курица"],
+                        optional: ["лук", "молоко"],
+                        time: "20 мин",
+                        level: "Легко",
+                        baseCals: 290,
+                        getDesc: (has) => `Легкий диетический суп из ваших запасов: ${has.join(', ')}.`,
+                        getSteps: (has) => `1. Отварите рис и куриное филе в небольшом количестве воды. ${has.includes('лук') ? '2. Добавьте пассерованный лук.' : ''} 3. Измельчите всё блендером до состояния пюре ${has.includes('молоко') ? ', влив немного молока для сливочного вкуса.' : '.'}`
+                    },
+                    {
+                        title: "🥞 Нежные молочные блины",
+                        required: ["молоко", "яйца"],
+                        optional: [],
                         time: "15 мин",
                         level: "Средне",
-                        cals: 280,
-                        desc: "Питательный салат с высоким содержанием чистого протеина.",
-                        steps: "1. Отварите или обжарьте куриное филе без масла. 2. Нарежьте томаты и курицу кубиками, смешайте со шпинатом. 3. Заправьте ложкой оливкового масла."
-                    },
-                    {
-                        title: "🍲 Теплая Гречка по-купечески",
-                        time: "20 мин",
-                        level: "Средне",
-                        cals: 320,
-                        desc: "Вкусный и полезный обед со сложными углеводами.",
-                        steps: "1. Обжарите курицу с помидорами на сковороде. 2. Добавьте гречку, потушите под крышкой на медленном огне 5 минут."
+                        baseCals: 210,
+                        getDesc: (has) => `Классический рецепт домашних блинчиков на молоке и яйцах.`,
+                        getSteps: (has) => `1. Взбейте яйца с молоком и щепоткой соли (при наличии добавьте 2 ложки муки). 2. Выпекайте на хорошо разогретой сковороде по 1 минуте с каждой стороны.`
                     }
                 ];
 
-                recipes.forEach((rec, idx) => {
+                let matchedRecipes = [];
+
+                // Проверяем каждый рецепт на наличие обязательных ингредиентов в холодильнике
+                recipeDatabase.forEach(recipe => {
+                    const hasAllRequired = recipe.required.every(req => lowerIngredients.includes(req));
+                    
+                    if (hasAllRequired) {
+                        // Собираем все ингредиенты, которые у нас совпали для этого рецепта
+                        const matchedOptional = recipe.optional.filter(opt => lowerIngredients.includes(opt));
+                        const allUsed = [...recipe.required, ...matchedOptional];
+
+                        // Рассчитываем калорийность с учетом дополнительных ингредиентов
+                        let finalCals = recipe.baseCals + (matchedOptional.length * 40);
+
+                        matchedRecipes.push({
+                            title: recipe.title,
+                            time: recipe.time,
+                            level: recipe.level,
+                            calories: finalCals,
+                            desc: recipe.getDesc(allUsed),
+                            steps: recipe.getSteps(allUsed)
+                        });
+                    }
+                });
+
+                // Если ничего не подошло под строгие правила, собираем один универсальный микс-рецепт
+                if (matchedRecipes.length === 0) {
+                    const itemsText = fridgeIngredients.join(', ');
+                    matchedRecipes.push({
+                        title: "🥗 Полезный ИИ-Микс «Сытый день»",
+                        time: "12 мин",
+                        level: "Легко",
+                        calories: 220,
+                        desc: `Эксклюзивное экспресс-блюдо из всех ваших продуктов: ${itemsText}.`,
+                        steps: `1. Подготовьте и измельчите ваши ингредиенты: ${itemsText}. 2. Прогрейте или смешайте их в глубокой посуде. 3. Заправьте любимыми специями и ложкой масла. Сбалансированный состав готов!`
+                    });
+                }
+
+                // Выводим рецепты на экран
+                matchedRecipes.forEach(rec => {
                     output.innerHTML += `
                         <div class="bg-slate-800/80 border border-slate-700 p-4 rounded-2xl space-y-2.5 animate-slideDown">
                             <div class="flex justify-between items-start">
@@ -846,19 +914,20 @@
                                     <span class="text-[8px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold uppercase">${rec.level} | ${rec.time}</span>
                                     <h4 class="text-xs font-extrabold text-white mt-1.5">${rec.title}</h4>
                                 </div>
-                                <span class="text-[11px] font-black text-emerald-400">${rec.cals} ккал</span>
+                                <span class="text-[11px] font-black text-emerald-400">${rec.calories} ккал</span>
                             </div>
                             <p class="text-[10px] text-slate-300 italic">${rec.desc}</p>
                             <div class="p-2 bg-slate-900/40 rounded-xl border border-slate-800 text-[9px] text-slate-400 leading-relaxed">
                                 <span class="font-bold text-slate-200 block mb-1">Рецепт:</span>
                                 ${rec.steps}
                             </div>
-                            <button onclick="cookRecipe('${rec.title}', ${rec.cals})" class="active-scale w-full bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-utensils"></i> Я приготовил это! (+${rec.cals} ккал)
+                            <button onclick="cookRecipe('${rec.title}', ${rec.calories})" class="active-scale w-full bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-utensils"></i> Я приготовил это! (+${rec.calories} ккал)
                             </button>
                         </div>
                     `;
                 });
+
                 showNotification('Рецепты успешно составлены ИИ! 🪄');
             }, 1200);
         }
@@ -955,7 +1024,7 @@
             });
         }
 
-        // Фотосканер (Добавлен эффект анимации!)
+        // Фотосканер
         function simulateScan(dishType) {
             const pr = {
                 salad: { name: "Зеленый боул с авокадо и киноа", calories: 340, macros: "Б: 12г | Ж: 18г | У: 24г", rating: "A+", verdict: "Превосходно! Жиры из авокадо нормализуют гормональный баланс, киноа дает долгую сытость." },
@@ -1019,6 +1088,7 @@
             }, 2000);
         }
 
+        // Добавить сообщение чата
         function addChatMessage(text, role) {
             const box = document.getElementById('chat-box');
             if(role === 'user') {
