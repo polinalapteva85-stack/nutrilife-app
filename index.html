@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NutriLife Pro | Смарт-Конструктор Тарелки & Баланс</title>
+    <title>NutriLife Pro | Кольца Баланса & Смарт-Нутрициолог</title>
     <!-- Web App Manifest & Mobile Meta -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -58,6 +58,12 @@
         .animate-toast {
             animation: slideIn 0.3s ease-out forwards;
         }
+        /* Плавная анимация SVG-колец */
+        .progress-ring {
+            transition: stroke-dashoffset 0.5s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
     </style>
 </head>
 <body class="h-full sm:min-h-screen flex items-center justify-center p-0 sm:p-4 text-slate-100 overflow-hidden">
@@ -107,7 +113,7 @@
             </div>
         </div>
 
-        <!-- ИНТЕРАКТИВНЫЙ МОДАЛЬНЫЙ КОНСТРУКТОР ТАРЕЛКИ (Новое!) -->
+        <!-- ИНТЕРАКТИВНЫЙ МОДАЛЬНЫЙ КОНСТРУКТОР ТАРЕЛКИ (Wellness-версия!) -->
         <div id="plate-modal" class="hidden absolute inset-0 bg-slate-950 z-50 flex flex-col justify-between p-4 pt-10 overflow-y-auto custom-scroll">
             
             <!-- Шапка конструктора -->
@@ -115,98 +121,131 @@
                 <button onclick="closePlateConstructor()" class="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800">
                     <i class="fa-solid fa-arrow-left text-xs"></i>
                 </button>
-                <span class="text-xs font-black uppercase tracking-wider text-emerald-400">Конструктор Тарелки</span>
+                <span class="text-xs font-black uppercase tracking-wider text-emerald-400">Кольца Баланса еды</span>
                 <button onclick="resetPlate()" class="text-[10px] font-bold text-slate-400 hover:text-white uppercase">Сброс</button>
             </div>
 
-            <!-- Визуальная тарелка здоровья -->
-            <div class="my-3 flex flex-col items-center">
-                <div class="relative w-48 h-48 rounded-full bg-slate-900 border-4 border-slate-800 flex items-center justify-center shadow-lg overflow-hidden">
+            <!-- Концентрические Кольца Нутриентов (Вместо старой тарелки) -->
+            <div class="my-4 flex flex-col items-center">
+                <div class="relative w-56 h-56 flex items-center justify-center">
                     
-                    <!-- Сектор 50%: Клетчатка (Овощи/Зелень) -->
-                    <div id="sector-fiber" class="absolute inset-0 bg-emerald-500/10 border-r-2 border-slate-800 flex flex-col items-center justify-center" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
-                        <span class="text-2xl block">🥗</span>
-                        <span class="text-[8px] font-bold text-emerald-400 mt-1">КЛЕТЧАТКА</span>
-                        <span id="fiber-count" class="text-[9px] text-slate-400">0г</span>
-                    </div>
+                    <!-- SVG Кольца баланса -->
+                    <svg class="absolute w-full h-full" viewBox="0 0 220 220">
+                        <!-- Фоновые серые кольца -->
+                        <circle cx="110" cy="110" r="90" fill="none" stroke="#1e293b" stroke-width="8"></circle>
+                        <circle cx="110" cy="110" r="72" fill="none" stroke="#1e293b" stroke-width="8"></circle>
+                        <circle cx="110" cy="110" r="54" fill="none" stroke="#1e293b" stroke-width="8"></circle>
 
-                    <!-- Сектор 25%: Белок -->
-                    <div id="sector-protein" class="absolute inset-0 bg-orange-500/10 border-b-2 border-slate-800 flex flex-col items-center justify-center" style="clip-path: polygon(50% 0, 100% 0, 100% 50%, 50% 50%); left: 50%; height: 50%;">
-                        <span class="text-xl block">🍗</span>
-                        <span class="text-[8px] font-bold text-orange-400 mt-0.5">БЕЛОК</span>
-                        <span id="protein-count" class="text-[9px] text-slate-400">0г</span>
-                    </div>
+                        <!-- Активное Кольцо 1: Клетчатка (Зеленое, r=90, длина=565.48) -->
+                        <circle id="ring-fiber" class="progress-ring" cx="110" cy="110" r="90" fill="none" 
+                                stroke="#10b981" stroke-width="8" stroke-linecap="round"
+                                stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
 
-                    <!-- Сектор 25%: Сложные углеводы -->
-                    <div id="sector-carbs" class="absolute inset-0 bg-amber-500/10 flex flex-col items-center justify-center" style="clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%); left: 50%; top: 50%; height: 50%;">
-                        <span class="text-xl block">🍚</span>
-                        <span class="text-[8px] font-bold text-amber-400 mt-0.5">УГЛЕВОДЫ</span>
-                        <span id="carbs-count" class="text-[9px] text-slate-400">0г</span>
-                    </div>
+                        <!-- Активное Кольцо 2: Белки (Оранжевое, r=72, длина=452.38) -->
+                        <circle id="ring-protein" class="progress-ring" cx="110" cy="110" r="72" fill="none" 
+                                stroke="#f97316" stroke-width="8" stroke-linecap="round"
+                                stroke-dasharray="452.38" stroke-dashoffset="452.38"></circle>
 
-                    <!-- Центральный кружок (Жиры) -->
-                    <div id="sector-fats" class="absolute w-12 h-12 rounded-full bg-slate-950 border-2 border-slate-800 flex flex-col items-center justify-center shadow">
-                        <span class="text-[10px] block">🥑</span>
-                        <span class="text-[6px] font-bold text-yellow-500">ЖИРЫ</span>
+                        <!-- Активное Кольцо 3: Углеводы (Желтое, r=54, длина=339.29) -->
+                        <circle id="ring-carbs" class="progress-ring" cx="110" cy="110" r="54" fill="none" 
+                                stroke="#f59e0b" stroke-width="8" stroke-linecap="round"
+                                stroke-dasharray="339.29" stroke-dashoffset="339.29"></circle>
+                    </svg>
+
+                    <!-- Центральная тарелка с эмодзи еды -->
+                    <div id="central-plate" class="w-24 h-24 rounded-full bg-slate-900 border-4 border-slate-800 flex flex-wrap items-center justify-center p-2 gap-1.5 shadow-2xl z-10 overflow-hidden">
+                        <span id="plate-placeholder-icon" class="text-3xl">🍽️</span>
                     </div>
                 </div>
 
-                <!-- Live КБЖУ тарелки -->
-                <div class="mt-3 text-center space-y-1">
-                    <span id="plate-rating" class="inline-block px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase">Баланс: Соберите тарелку</span>
-                    <h4 id="plate-calories" class="text-base font-black text-white">0 ккал</h4>
-                    <p id="plate-macros" class="text-[9px] text-slate-400">Б: 0г | Ж: 0г | У: 0г</p>
+                <!-- Панель КБЖУ со шкалами -->
+                <div class="mt-2 text-center w-full max-w-[280px] space-y-1.5">
+                    <span id="plate-rating" class="inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-wider">Наполните тарелку</span>
+                    <h4 id="plate-calories" class="text-xl font-black text-white">0 ккал</h4>
+                    
+                    <!-- Цифровые метки граммовок нутриентов -->
+                    <div class="flex justify-between text-[10px] font-bold text-slate-400 pt-1">
+                        <span class="text-emerald-400"><i class="fa-solid fa-circle text-[6px] mr-1"></i>Кл: <span id="fiber-count">0г</span></span>
+                        <span class="text-orange-400"><i class="fa-solid fa-circle text-[6px] mr-1"></i>Бел: <span id="protein-count">0г</span></span>
+                        <span class="text-amber-400"><i class="fa-solid fa-circle text-[6px] mr-1"></i>Угл: <span id="carbs-count">0г</span></span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Ингредиенты для выбора -->
-            <div class="space-y-3 flex-1 overflow-y-auto max-h-[220px] custom-scroll px-1">
+            <!-- Ингредиенты для выбора (Группировка по категориям) -->
+            <div class="space-y-4 flex-1 overflow-y-auto max-h-[220px] custom-scroll px-1">
                 
                 <!-- Овощи и зелень (50%) -->
-                <div class="space-y-1.5">
-                    <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-wider block">🥗 Добавить Клетчатку (Овощи/Зелень)</span>
-                    <div class="flex flex-wrap gap-1">
-                        <button onclick="addIngredientToPlate('Брокколи', 'fiber', 25, 1.2, 0.2, 2.5)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥦 Брокколи</button>
-                        <button onclick="addIngredientToPlate('Томаты', 'fiber', 18, 0.6, 0.1, 3.8)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🍅 Томаты</button>
-                        <button onclick="addIngredientToPlate('Шпинат', 'fiber', 23, 2.9, 0.3, 3.6)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥬 Шпинат</button>
-                        <button onclick="addIngredientToPlate('Огурец', 'fiber', 15, 0.8, 0.1, 2.8)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥒 Огурец</button>
+                <div class="space-y-2">
+                    <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block"><i class="fa-solid fa-carrot"></i> Клетчатка (Цель: 50% тарелки)</span>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button onclick="addIngredientToPlate('Брокколи', 'fiber', '🥦', 25, 1.2, 0.2, 2.5)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🥦</span> Брокколи <span class="ml-auto text-emerald-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Томаты', 'fiber', '🍅', 18, 0.6, 0.1, 3.8)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🍅</span> Томаты <span class="ml-auto text-emerald-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Шпинат', 'fiber', '🥬', 23, 2.9, 0.3, 3.6)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🥬</span> Шпинат <span class="ml-auto text-emerald-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Огурец', 'fiber', '🥒', 15, 0.8, 0.1, 2.8)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🥒</span> Огурец <span class="ml-auto text-emerald-400">+100г</span>
+                        </button>
                     </div>
                 </div>
 
                 <!-- Белки (25%) -->
-                <div class="space-y-1.5">
-                    <span class="text-[9px] font-bold text-orange-400 uppercase tracking-wider block">🍗 Добавить Качественный Белок</span>
-                    <div class="flex flex-wrap gap-1">
-                        <button onclick="addIngredientToPlate('Курица (филе)', 'protein', 113, 23.6, 1.9, 0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🍗 Куриное филе</button>
-                        <button onclick="addIngredientToPlate('Яйцо', 'protein', 74, 6.3, 5.3, 0.4)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥚 Яйцо</button>
-                        <button onclick="addIngredientToPlate('Запеченный Лосось', 'protein', 142, 19.8, 6.3, 0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🐟 Лосось</button>
-                        <button onclick="addIngredientToPlate('Тофу', 'protein', 76, 8.1, 4.8, 1.9)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🧈 Тофу</button>
+                <div class="space-y-2">
+                    <span class="text-[9px] font-bold text-orange-400 uppercase tracking-widest block"><i class="fa-solid fa-egg"></i> Протеин / Белки (Цель: 25% тарелки)</span>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button onclick="addIngredientToPlate('Курица', 'protein', '🍗', 113, 23.6, 1.9, 0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🍗</span> Куриное филе <span class="ml-auto text-orange-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Яйцо', 'protein', '🥚', 74, 6.3, 5.3, 0.4)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🥚</span> Яйцо вареное <span class="ml-auto text-orange-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Лосось', 'protein', '🐟', 142, 19.8, 6.3, 0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🐟</span> Лосось <span class="ml-auto text-orange-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Тофу', 'protein', '🧈', 76, 8.1, 4.8, 1.9)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🧈</span> Тофу <span class="ml-auto text-orange-400">+100г</span>
+                        </button>
                     </div>
                 </div>
 
                 <!-- Сложные углеводы (25%) -->
-                <div class="space-y-1.5">
-                    <span class="text-[9px] font-bold text-amber-400 uppercase tracking-wider block">🍚 Добавить Сложные Углеводы</span>
-                    <div class="flex flex-wrap gap-1">
-                        <button onclick="addIngredientToPlate('Киноа (отварной)', 'carbs', 120, 4.4, 1.9, 21.3)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🍚 Киноа</button>
-                        <button onclick="addIngredientToPlate('Бурый Рис', 'carbs', 111, 2.6, 0.9, 23.1)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🌾 Бурый рис</button>
-                        <button onclick="addIngredientToPlate('Гречка', 'carbs', 132, 4.5, 2.3, 25.0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🤎 Гречка</button>
+                <div class="space-y-2">
+                    <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest block"><i class="fa-solid fa-wheat-awn"></i> Сложные Углеводы (Цель: 25% тарелки)</span>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button onclick="addIngredientToPlate('Киноа', 'carbs', '🍚', 120, 4.4, 1.9, 21.3)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🍚</span> Киноа <span class="ml-auto text-amber-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Бурый Рис', 'carbs', '🌾', 111, 2.6, 0.9, 23.1)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🌾</span> Бурый рис <span class="ml-auto text-amber-400">+100г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Гречка', 'carbs', '🤎', 132, 4.5, 2.3, 25.0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🤎</span> Гречка <span class="ml-auto text-amber-400">+100г</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Полезные жиры -->
-                <div class="space-y-1.5">
-                    <span class="text-[9px] font-bold text-yellow-500 uppercase tracking-wider block">🥑 Добавить Полезные Жиры</span>
-                    <div class="flex flex-wrap gap-1">
-                        <button onclick="addIngredientToPlate('Авокадо', 'fats', 160, 2.0, 14.7, 8.5)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥑 Авокадо</button>
-                        <button onclick="addIngredientToPlate('Оливковое Масло', 'fats', 884, 0, 100, 0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🏺 Оливковое масло</button>
+                <!-- Полезные жиры (Опция) -->
+                <div class="space-y-2">
+                    <span class="text-[9px] font-bold text-yellow-500 uppercase tracking-widest block"><i class="fa-solid fa-oil-can"></i> Полезные Жиры (Дополнение)</span>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <button onclick="addIngredientToPlate('Авокадо', 'fats', '🥑', 160, 2.0, 14.7, 8.5)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🥑</span> Авокадо <span class="ml-auto text-yellow-500">+30г</span>
+                        </button>
+                        <button onclick="addIngredientToPlate('Оливковое Масло', 'fats', '🏺', 120, 0, 14, 0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
+                            <span class="text-base">🏺</span> Масло оливк. <span class="ml-auto text-yellow-500">+15г</span>
+                        </button>
                     </div>
                 </div>
 
             </div>
 
             <!-- Кнопка «Съесть» -->
-            <button onclick="eatPlate()" class="active-scale mt-3 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
+            <button onclick="eatPlate()" class="active-scale mt-3 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
                 <i class="fa-solid fa-circle-check"></i> Съесть блюдо и внести в дневник
             </button>
         </div>
@@ -323,7 +362,7 @@
                   <i class="fa-solid fa-chevron-right text-white text-sm"></i>
                 </div>
 
-                <!-- Смарт-Конструктор тарелки здоровья (УБРАЛИ БАЖНЫЙ СКАНЕР!) -->
+                <!-- Смарт-Конструктор тарелки здоровья -->
                 <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-2xl space-y-3">
                   <div class="flex items-center gap-2 text-emerald-400">
                     <i class="fa-solid fa-utensils text-xs"></i>
@@ -891,7 +930,7 @@
                         level: "Легко",
                         baseCals: 150,
                         getDesc: (has) => `Нежнейший белковый омлет, приготовленный из ваших продуктов: ${has.join(', ')}.`,
-                        getSteps: (has) => `1. Взбейте яйца ${has.includes('молоко') ? 'с молоком' : 'с каплей воды'}. ${has.includes('лук') || has.includes('томаты') ? '2. Припустите нарезанные лук и томаты на сковороде 2 минуты.' : ''} 3. Вылейте яичную смесь на сковороду. ${has.includes('сыр') ? 'Посыпьте тертым сыром перед подачей.' : 'Готовьте под крышкой 5 минут.'}`
+                        getSteps: (has) => `1. Взбейте яйца ${has.includes('молоко') ? 'с молоком' : 'с каплей воды'}. ${has.includes('лук') || has.includes('томаты') ? '2. Припустите нарезанные лук и томаты на сковороде 2 минуты.' : ''} 3. Вылейте яичную смесь на скороводу. ${has.includes('сыр') ? 'Посыпьте тертым сыром перед подачей.' : 'Готовьте под крышкой 5 минут.'}`
                     },
                     {
                         title: "🍚 Домашний плов с нежной курочкой",
@@ -1102,48 +1141,77 @@
         }
 
         function resetPlate() {
-            currentPlate = { fiber: 0, protein: 0, carbs: 0, fats: 0, calories: 0, items: [] };
+            currentPlate = { fiber: 0, protein: 0, carbs: 0, fats: 0, calories: 0, items: [], emojis: [] };
             
             // Сбрасываем подцветку секторов
-            document.getElementById('sector-fiber').style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
-            document.getElementById('sector-protein').style.backgroundColor = 'rgba(249, 115, 22, 0.1)';
-            document.getElementById('sector-carbs').style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
-            document.getElementById('sector-fats').style.backgroundColor = 'rgba(5, 5, 5, 1)';
+            updateRingProgress('fiber', 0, 565.48);
+            updateRingProgress('protein', 0, 452.38);
+            updateRingProgress('carbs', 0, 339.29);
 
             // Сбрасываем текст граммовок
             document.getElementById('fiber-count').innerText = '0г';
             document.getElementById('protein-count').innerText = '0г';
             document.getElementById('carbs-count').innerText = '0г';
 
+            // Очищаем центральную тарелку
+            const centralPlate = document.getElementById('central-plate');
+            centralPlate.innerHTML = '<span id="plate-placeholder-icon" class="text-3xl">🍽️</span>';
+
             updatePlateUI();
         }
 
-        function addIngredientToPlate(name, sector, cals, p, f, c) {
+        // Функция плавной анимации SVG кольца
+        function updateRingProgress(ringType, percentage, totalLength) {
+            const ring = document.getElementById(`ring-${ringType}`);
+            const offset = totalLength - (Math.min(100, percentage) / 100) * totalLength;
+            ring.style.strokeDashoffset = offset;
+        }
+
+        function addIngredientToPlate(name, sector, emoji, cals, p, f, c) {
+            // Лимит на отображение эмодзи на тарелке (не более 4-5 штук, чтобы выглядело аккуратно)
+            const centralPlate = document.getElementById('central-plate');
+            const placeholder = document.getElementById('plate-placeholder-icon');
+            if (placeholder) {
+                centralPlate.innerHTML = '';
+            }
+
             // Добавляем вес в сектор (порция по умолчанию 100г)
             if (sector === 'fiber') {
                 currentPlate.fiber += 100;
-                document.getElementById('sector-fiber').style.backgroundColor = 'rgba(16, 185, 129, 0.4)';
+                // Насыщение зеленого кольца на максимум при 300г
+                const percent = Math.min(100, (currentPlate.fiber / 300) * 100);
+                updateRingProgress('fiber', percent, 565.48);
                 document.getElementById('fiber-count').innerText = currentPlate.fiber + 'г';
             } else if (sector === 'protein') {
                 currentPlate.protein += 100;
-                document.getElementById('sector-protein').style.backgroundColor = 'rgba(249, 115, 22, 0.4)';
+                // Насыщение оранжевого кольца на максимум при 200г
+                const percent = Math.min(100, (currentPlate.protein / 200) * 100);
+                updateRingProgress('protein', percent, 452.38);
                 document.getElementById('protein-count').innerText = currentPlate.protein + 'г';
             } else if (sector === 'carbs') {
                 currentPlate.carbs += 100;
-                document.getElementById('sector-carbs').style.backgroundColor = 'rgba(245, 158, 11, 0.4)';
+                // Насыщение желтого кольца на максимум при 200г
+                const percent = Math.min(100, (currentPlate.carbs / 200) * 100);
+                updateRingProgress('carbs', percent, 339.29);
                 document.getElementById('carbs-count').innerText = currentPlate.carbs + 'г';
             } else if (sector === 'fats') {
                 currentPlate.fats += 30; // Жиров берем поменьше порцию
-                document.getElementById('sector-fats').style.backgroundColor = 'rgba(234, 179, 8, 0.4)';
             }
 
             currentPlate.calories += Math.round(cals);
             if (!currentPlate.items.includes(name)) {
                 currentPlate.items.push(name);
+                
+                // Добавляем эмодзи на виртуальную тарелку
+                const emojiSpan = document.createElement('span');
+                emojiSpan.className = 'text-2xl animate-pulse';
+                emojiSpan.innerText = emoji;
+                centralPlate.appendChild(emojiSpan);
+                setTimeout(() => emojiSpan.classList.remove('animate-pulse'), 500);
             }
 
             updatePlateUI();
-            showNotification(`Добавлено на тарелку: ${name} 👍`);
+            showNotification(`Добавлено на тарелку: ${name} ${emoji}`);
         }
 
         function updatePlateUI() {
@@ -1160,8 +1228,8 @@
             const ratingLabel = document.getElementById('plate-rating');
             
             if (currentPlate.items.length === 0) {
-                ratingLabel.innerText = "Баланс: Соберите тарелку";
-                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px] font-black uppercase";
+                ratingLabel.innerText = "Соберите тарелку";
+                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-wider";
                 return;
             }
 
@@ -1172,16 +1240,16 @@
 
             if (hasFiber && hasProtein && hasCarbs) {
                 ratingLabel.innerText = "Идеальный баланс! Оценка: A+ 👑";
-                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase";
+                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-wider";
             } else if (hasFiber && hasProtein) {
                 ratingLabel.innerText = "Низкоуглеводный баланс. Оценка: A";
-                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-teal-500/20 text-teal-400 text-[10px] font-black uppercase";
+                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-teal-500/20 text-teal-400 text-[10px] font-black uppercase tracking-wider";
             } else if (hasProtein && hasCarbs) {
                 ratingLabel.innerText = "Мало клетчатки! Оценка: B- ⚠️";
-                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px] font-black uppercase";
+                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-black uppercase tracking-wider";
             } else {
                 ratingLabel.innerText = "Не сбалансировано. Оценка: C";
-                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-red-500/20 text-red-400 text-[10px] font-black uppercase";
+                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-wider";
             }
         }
 
@@ -1191,7 +1259,7 @@
                 return;
             }
 
-            const dishName = `Конструктор: ${currentPlate.items.slice(0, 3).join(' + ')}` + (currentPlate.items.length > 3 ? '...' : '');
+            const dishName = `Тарелка: ${currentPlate.items.slice(0, 3).join(' + ')}` + (currentPlate.items.length > 3 ? '...' : '');
             
             meals.push({
                 id: Date.now(),
