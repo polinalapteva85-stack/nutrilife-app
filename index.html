@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>NutriLife Pro | Реальный ИИ-Сканер Еды</title>
+    <title>NutriLife Pro | Смарт-Конструктор Тарелки & Баланс</title>
     <!-- Web App Manifest & Mobile Meta -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -58,14 +58,6 @@
         .animate-toast {
             animation: slideIn 0.3s ease-out forwards;
         }
-        @keyframes scanMove {
-            0% { top: 0%; }
-            50% { top: 100%; }
-            100% { top: 0%; }
-        }
-        .scanner-line {
-            animation: scanMove 2s infinite linear;
-        }
     </style>
 </head>
 <body class="h-full sm:min-h-screen flex items-center justify-center p-0 sm:p-4 text-slate-100 overflow-hidden">
@@ -76,20 +68,6 @@
         <!-- Upper Notch (Динамический Остров) -->
         <div class="hidden sm:flex absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-5 bg-slate-800 rounded-b-xl z-50 items-center justify-center">
             <div class="w-12 h-1 bg-black rounded-full mb-1"></div>
-        </div>
-
-        <!-- АНИМАЦИОННЫЙ СЛОЙ ИИ-СКАНЕРА -->
-        <div id="scanner-overlay" class="hidden absolute inset-0 bg-slate-950/90 z-50 flex flex-col items-center justify-center p-6">
-            <div class="relative w-64 h-64 border-4 border-dashed border-emerald-500 rounded-3xl overflow-hidden flex items-center justify-center bg-slate-900/50">
-                <div class="scanner-line absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent shadow-[0_0_15px_#10b981]"></div>
-                <!-- Предпросмотр реального загруженного фото во время сканирования -->
-                <img id="scanned-image-preview" src="" class="absolute inset-0 w-full h-full object-cover opacity-70">
-            </div>
-            <div class="text-center mt-6 space-y-2">
-                <h4 class="text-sm font-bold text-white tracking-wider uppercase">Нейро-Сканнер</h4>
-                <p class="text-xs text-emerald-400 font-bold animate-pulse">ИИ расшифровывает состав тарелки...</p>
-                <p class="text-[10px] text-slate-500">Определяем калорийность, белки, жиры и углеводы</p>
-            </div>
         </div>
 
         <!-- ШАПКА ТЕЛЕФОНА -->
@@ -129,6 +107,110 @@
             </div>
         </div>
 
+        <!-- ИНТЕРАКТИВНЫЙ МОДАЛЬНЫЙ КОНСТРУКТОР ТАРЕЛКИ (Новое!) -->
+        <div id="plate-modal" class="hidden absolute inset-0 bg-slate-950 z-50 flex flex-col justify-between p-4 pt-10 overflow-y-auto custom-scroll">
+            
+            <!-- Шапка конструктора -->
+            <div class="flex items-center justify-between px-2">
+                <button onclick="closePlateConstructor()" class="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                </button>
+                <span class="text-xs font-black uppercase tracking-wider text-emerald-400">Конструктор Тарелки</span>
+                <button onclick="resetPlate()" class="text-[10px] font-bold text-slate-400 hover:text-white uppercase">Сброс</button>
+            </div>
+
+            <!-- Визуальная тарелка здоровья -->
+            <div class="my-3 flex flex-col items-center">
+                <div class="relative w-48 h-48 rounded-full bg-slate-900 border-4 border-slate-800 flex items-center justify-center shadow-lg overflow-hidden">
+                    
+                    <!-- Сектор 50%: Клетчатка (Овощи/Зелень) -->
+                    <div id="sector-fiber" class="absolute inset-0 bg-emerald-500/10 border-r-2 border-slate-800 flex flex-col items-center justify-center" style="clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);">
+                        <span class="text-2xl block">🥗</span>
+                        <span class="text-[8px] font-bold text-emerald-400 mt-1">КЛЕТЧАТКА</span>
+                        <span id="fiber-count" class="text-[9px] text-slate-400">0г</span>
+                    </div>
+
+                    <!-- Сектор 25%: Белок -->
+                    <div id="sector-protein" class="absolute inset-0 bg-orange-500/10 border-b-2 border-slate-800 flex flex-col items-center justify-center" style="clip-path: polygon(50% 0, 100% 0, 100% 50%, 50% 50%); left: 50%; height: 50%;">
+                        <span class="text-xl block">🍗</span>
+                        <span class="text-[8px] font-bold text-orange-400 mt-0.5">БЕЛОК</span>
+                        <span id="protein-count" class="text-[9px] text-slate-400">0г</span>
+                    </div>
+
+                    <!-- Сектор 25%: Сложные углеводы -->
+                    <div id="sector-carbs" class="absolute inset-0 bg-amber-500/10 flex flex-col items-center justify-center" style="clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%); left: 50%; top: 50%; height: 50%;">
+                        <span class="text-xl block">🍚</span>
+                        <span class="text-[8px] font-bold text-amber-400 mt-0.5">УГЛЕВОДЫ</span>
+                        <span id="carbs-count" class="text-[9px] text-slate-400">0г</span>
+                    </div>
+
+                    <!-- Центральный кружок (Жиры) -->
+                    <div id="sector-fats" class="absolute w-12 h-12 rounded-full bg-slate-950 border-2 border-slate-800 flex flex-col items-center justify-center shadow">
+                        <span class="text-[10px] block">🥑</span>
+                        <span class="text-[6px] font-bold text-yellow-500">ЖИРЫ</span>
+                    </div>
+                </div>
+
+                <!-- Live КБЖУ тарелки -->
+                <div class="mt-3 text-center space-y-1">
+                    <span id="plate-rating" class="inline-block px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase">Баланс: Соберите тарелку</span>
+                    <h4 id="plate-calories" class="text-base font-black text-white">0 ккал</h4>
+                    <p id="plate-macros" class="text-[9px] text-slate-400">Б: 0г | Ж: 0г | У: 0г</p>
+                </div>
+            </div>
+
+            <!-- Ингредиенты для выбора -->
+            <div class="space-y-3 flex-1 overflow-y-auto max-h-[220px] custom-scroll px-1">
+                
+                <!-- Овощи и зелень (50%) -->
+                <div class="space-y-1.5">
+                    <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-wider block">🥗 Добавить Клетчатку (Овощи/Зелень)</span>
+                    <div class="flex flex-wrap gap-1">
+                        <button onclick="addIngredientToPlate('Брокколи', 'fiber', 25, 1.2, 0.2, 2.5)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥦 Брокколи</button>
+                        <button onclick="addIngredientToPlate('Томаты', 'fiber', 18, 0.6, 0.1, 3.8)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🍅 Томаты</button>
+                        <button onclick="addIngredientToPlate('Шпинат', 'fiber', 23, 2.9, 0.3, 3.6)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥬 Шпинат</button>
+                        <button onclick="addIngredientToPlate('Огурец', 'fiber', 15, 0.8, 0.1, 2.8)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥒 Огурец</button>
+                    </div>
+                </div>
+
+                <!-- Белки (25%) -->
+                <div class="space-y-1.5">
+                    <span class="text-[9px] font-bold text-orange-400 uppercase tracking-wider block">🍗 Добавить Качественный Белок</span>
+                    <div class="flex flex-wrap gap-1">
+                        <button onclick="addIngredientToPlate('Курица (филе)', 'protein', 113, 23.6, 1.9, 0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🍗 Куриное филе</button>
+                        <button onclick="addIngredientToPlate('Яйцо', 'protein', 74, 6.3, 5.3, 0.4)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥚 Яйцо</button>
+                        <button onclick="addIngredientToPlate('Запеченный Лосось', 'protein', 142, 19.8, 6.3, 0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🐟 Лосось</button>
+                        <button onclick="addIngredientToPlate('Тофу', 'protein', 76, 8.1, 4.8, 1.9)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🧈 Тофу</button>
+                    </div>
+                </div>
+
+                <!-- Сложные углеводы (25%) -->
+                <div class="space-y-1.5">
+                    <span class="text-[9px] font-bold text-amber-400 uppercase tracking-wider block">🍚 Добавить Сложные Углеводы</span>
+                    <div class="flex flex-wrap gap-1">
+                        <button onclick="addIngredientToPlate('Киноа (отварной)', 'carbs', 120, 4.4, 1.9, 21.3)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🍚 Киноа</button>
+                        <button onclick="addIngredientToPlate('Бурый Рис', 'carbs', 111, 2.6, 0.9, 23.1)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🌾 Бурый рис</button>
+                        <button onclick="addIngredientToPlate('Гречка', 'carbs', 132, 4.5, 2.3, 25.0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🤎 Гречка</button>
+                    </div>
+                </div>
+
+                <!-- Полезные жиры -->
+                <div class="space-y-1.5">
+                    <span class="text-[9px] font-bold text-yellow-500 uppercase tracking-wider block">🥑 Добавить Полезные Жиры</span>
+                    <div class="flex flex-wrap gap-1">
+                        <button onclick="addIngredientToPlate('Авокадо', 'fats', 160, 2.0, 14.7, 8.5)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🥑 Авокадо</button>
+                        <button onclick="addIngredientToPlate('Оливковое Масло', 'fats', 884, 0, 100, 0)" class="px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-semibold active-scale">+🏺 Оливковое масло</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Кнопка «Съесть» -->
+            <button onclick="eatPlate()" class="active-scale mt-3 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-2.5 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
+                <i class="fa-solid fa-circle-check"></i> Съесть блюдо и внести в дневник
+            </button>
+        </div>
+
         <!-- ОСНОВНОЙ ЭКРАН С КОНТЕНТОМ -->
         <main class="flex-1 overflow-y-auto pb-24 pt-2 px-4 custom-scroll">
             
@@ -146,7 +228,7 @@
                   </div>
                 </div>
 
-                <!-- Карточки Трекеров -->
+                <!-- Карточки Трекеров (Сетка 2х2) -->
                 <div class="grid grid-cols-2 gap-2.5">
                   
                   <!-- Калории -->
@@ -241,21 +323,19 @@
                   <i class="fa-solid fa-chevron-right text-white text-sm"></i>
                 </div>
 
-                <!-- Реальный ИИ-Фотосканер (Новое!) -->
+                <!-- Смарт-Конструктор тарелки здоровья (УБРАЛИ БАЖНЫЙ СКАНЕР!) -->
                 <div class="bg-slate-800/20 border border-slate-800 p-4 rounded-2xl space-y-3">
-                  <div class="flex items-center gap-2 text-teal-400">
-                    <i class="fa-solid fa-camera text-xs"></i>
-                    <span class="text-[10px] font-bold uppercase tracking-wider">Настоящий ИИ-сканер тарелки</span>
+                  <div class="flex items-center gap-2 text-emerald-400">
+                    <i class="fa-solid fa-utensils text-xs"></i>
+                    <span class="text-[10px] font-bold uppercase tracking-wider">Интерактивный конструктор еды</span>
                   </div>
                   <p class="text-[10px] text-slate-400 leading-relaxed">
-                    Сфотографируйте свою настоящую тарелку с едой или загрузите фото из галереи. Наш искусственный интеллект проанализирует снимок:
+                    Соберите свою идеальную тарелку по Гарвардскому золотому методу (50% овощей, 25% белка, 25% углеводов). Наш алгоритм рассчитает баланс БЖУ:
                   </p>
                   
-                  <!-- Реальная системная кнопка выбора файлов и запуска камеры на мобильном -->
-                  <label class="active-scale w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl text-xs font-extrabold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2 cursor-pointer">
-                      <i class="fa-solid fa-camera-retro"></i> 📸 Сделать фото / Выбрать снимок
-                      <input type="file" id="real-camera-input" accept="image/*" class="hidden" onchange="handleRealImageUpload(event)">
-                  </label>
+                  <button onclick="openPlateConstructor()" class="active-scale w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl text-xs font-extrabold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2">
+                      <i class="fa-solid fa-puzzle-piece"></i> 🍽️ Собрать тарелку здоровья
+                  </button>
                 </div>
 
             </div>
@@ -330,12 +410,12 @@
                             <button onclick="toggleFastIngredient('Сыр')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cheese text-amber-400"></i> Сыр</button>
                             <button onclick="toggleFastIngredient('Огурец')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-leaf text-green-400"></i> Огурец</button>
                             <button onclick="toggleFastIngredient('Рис')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-bowl-rice text-indigo-400"></i> Рис</button>
-                            <button onclick="toggleFastIngredient('Молоко')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cow text-teal-400"></i> Молоко</button>
+                            <button onclick="toggleFastIngredient('Молоко')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cow text-teal-400"></i> Milk</button>
                             <button onclick="toggleFastIngredient('Лук')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-seedling text-yellow-600"></i> Лук</button>
                         </div>
                     </div>
 
-                    <!-- Мой холодильник (Список тегов) -->
+                    <!-- Мой холодильник -->
                     <div class="pt-2 border-t border-slate-800">
                         <span class="text-[9px] font-bold text-slate-300 block mb-2">В моем холодильнике:</span>
                         <div id="ingredients-container" class="flex flex-wrap gap-1.5 min-h-[40px] p-2 bg-slate-950/40 rounded-xl border border-slate-800/60">
@@ -390,25 +470,7 @@
                     </div>
                 </div>
 
-                <!-- Карточка ИИ-Анализа результатов реального фото (Новое!) -->
-                <div id="scan-result-card" class="hidden bg-slate-800/90 border border-emerald-500/30 p-4 rounded-2xl space-y-3">
-                  <div class="flex items-center justify-between">
-                    <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-1">
-                      <i class="fa-solid fa-brain"></i> Нейросетевой Анализ Фото
-                    </span>
-                    <span id="scan-rating" class="w-6 h-6 rounded-full bg-emerald-500 text-white text-[10px] font-black flex items-center justify-center">A+</span>
-                  </div>
-                  <div>
-                    <h4 id="scan-name" class="text-xs font-extrabold text-white"></h4>
-                    <p id="scan-macros" class="text-[10px] text-slate-400 mt-1"></p>
-                  </div>
-                  <p id="scan-verdict" class="text-[10px] text-slate-300 leading-relaxed bg-slate-900/40 p-2 rounded-xl border border-slate-800"></p>
-                  <button id="add-scanned-btn" class="active-scale w-full bg-emerald-500 hover:bg-emerald-600 text-white py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all">
-                    Внести в дневник питания
-                  </button>
-                </div>
-
-                <div id="chat-box" class="bg-slate-950/40 border border-slate-800 rounded-2xl p-3.5 space-y-3.5 overflow-y-auto h-[180px] custom-scroll">
+                <div id="chat-box" class="bg-slate-950/40 border border-slate-800 rounded-2xl p-3.5 space-y-3.5 overflow-y-auto h-[260px] custom-scroll">
                     <div class="flex gap-2 max-w-[85%]">
                       <div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs">
                         <i class="fa-solid fa-apple-whole"></i>
@@ -530,9 +592,6 @@
 
     <!-- ЛОГИКА ПРИЛОЖЕНИЯ -->
     <script>
-        // Инициализация API Ключа (передается средой)
-        const apiKey = ""; 
-
         // Дефолтные настройки
         const defaultProfile = {
             name: 'Екатерина', weight: 60, height: 168, age: 27,
@@ -549,6 +608,16 @@
         
         let meals = [];
         let fridgeIngredients = []; // Массив продуктов в холодильнике
+
+        // Данные текущей собираемой интерактивной тарелки
+        let currentPlate = {
+            fiber: 0,     // граммы клетчатки
+            protein: 0,   // граммы белков
+            carbs: 0,     // граммы углеводов
+            fats: 0,      // граммы жиров
+            calories: 0,
+            items: []     // список названий добавленных продуктов
+        };
 
         // Показать всплывающее уведомление (Toast)
         function showNotification(text, type = 'success') {
@@ -1023,151 +1092,123 @@
             });
         }
 
-        // НАСТОЯЩИЙ ИИ-АНАЛИЗАТОР ИЗОБРАЖЕНИЙ (Новое!)
-        // Функция обработки реального загруженного файла изображения
-        function handleRealImageUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            // Выводим предпросмотр фотографии на экран
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const base64Data = e.target.result.split(',')[1];
-                const mimeType = file.type;
-                
-                // Показываем оверлей реального сканирования
-                const previewImg = document.getElementById('scanned-image-preview');
-                previewImg.src = e.target.result;
-                
-                const scanner = document.getElementById('scanner-overlay');
-                scanner.classList.remove('hidden');
-                
-                showNotification('Фото загружено. Подключаем ИИ-модель... 📸', 'success');
-
-                // Передаем Base64 изображения в API Gemini для честного распознавания!
-                sendImageToGemini(base64Data, mimeType);
-            };
-            reader.readAsDataURL(file);
+        // ЛОГИКА СМАРТ-КОНСТРУКТОРА ТАРЕЛКИ (Новое!)
+        function openPlateConstructor() {
+            document.getElementById('plate-modal').classList.remove('hidden');
         }
 
-        // Запрос к API Gemini (Мультимодальное понимание картинок)
-        async function sendImageToGemini(base64Data, mimeType) {
-            // Очищаем поле ввода файлов
-            document.getElementById('real-camera-input').value = "";
+        function closePlateConstructor() {
+            document.getElementById('plate-modal').classList.add('hidden');
+        }
 
-            const systemPrompt = `Ты профессиональный превентивный нутрициолог, диетолог и ИИ-анализатор тарелки. Твоя задача — проанализировать присланную фотографию еды и вернуть строго структурированный JSON ответ на русском языке. 
-            Структура JSON должна содержать следующие поля:
-            {
-                "name": "Название определенного блюда на фото (кратко и аппетитно)",
-                "calories": 250, // целое число калорий
-                "macros": {
-                    "p": 15, // белки в граммах (целое число)
-                    "f": 10, // жиры в граммах (целое число)
-                    "c": 30  // углеводы в граммах (целое число)
-                },
-                "rating": "A+", // Нутрициологическая оценка блюда от A+ (супер-полезно) до F (вредно)
-                "verdict": "Подробный экспертный нутрициологический анализ блюда (2-3 предложения): разбор полезных нутриентов, рекомендации по улучшению баланса и усвоению."
-            }
-            Не добавляй никакого стороннего текста вне формата JSON!`;
+        function resetPlate() {
+            currentPlate = { fiber: 0, protein: 0, carbs: 0, fats: 0, calories: 0, items: [] };
+            
+            // Сбрасываем подцветку секторов
+            document.getElementById('sector-fiber').style.backgroundColor = 'rgba(16, 185, 129, 0.1)';
+            document.getElementById('sector-protein').style.backgroundColor = 'rgba(249, 115, 22, 0.1)';
+            document.getElementById('sector-carbs').style.backgroundColor = 'rgba(245, 158, 11, 0.1)';
+            document.getElementById('sector-fats').style.backgroundColor = 'rgba(5, 5, 5, 1)';
 
-            const promptText = "Проанализируй блюдо на этой фотографии. Дай его точные КБЖУ, оценку и развернутый вердикт нутрициолога по форме.";
+            // Сбрасываем текст граммовок
+            document.getElementById('fiber-count').innerText = '0г';
+            document.getElementById('protein-count').innerText = '0г';
+            document.getElementById('carbs-count').innerText = '0г';
 
-            const payload = {
-                contents: [{
-                    role: "user",
-                    parts: [
-                        { text: promptText },
-                        {
-                            inlineData: {
-                                mimeType: mimeType,
-                                data: base64Data
-                            }
-                        }
-                    ]
-                }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                generationConfig: {
-                    responseMimeType: "application/json"
-                }
-            };
+            updatePlateUI();
+        }
 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-            // Запускаем отправку с механизмом экспоненциального бэкапа (до 5 попыток)
-            let attempts = 0;
-            let success = false;
-            let resultText = "";
-
-            while (attempts < 5 && !success) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        resultText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                        success = true;
-                    } else {
-                        throw new Error(`Ошибка сервера: ${response.status}`);
-                    }
-                } catch (error) {
-                    attempts++;
-                    const delay = Math.pow(2, attempts) * 1000;
-                    await new Promise(resolve => setTimeout(resolve, delay));
-                }
+        function addIngredientToPlate(name, sector, cals, p, f, c) {
+            // Добавляем вес в сектор (порция по умолчанию 100г)
+            if (sector === 'fiber') {
+                currentPlate.fiber += 100;
+                document.getElementById('sector-fiber').style.backgroundColor = 'rgba(16, 185, 129, 0.4)';
+                document.getElementById('fiber-count').innerText = currentPlate.fiber + 'г';
+            } else if (sector === 'protein') {
+                currentPlate.protein += 100;
+                document.getElementById('sector-protein').style.backgroundColor = 'rgba(249, 115, 22, 0.4)';
+                document.getElementById('protein-count').innerText = currentPlate.protein + 'г';
+            } else if (sector === 'carbs') {
+                currentPlate.carbs += 100;
+                document.getElementById('sector-carbs').style.backgroundColor = 'rgba(245, 158, 11, 0.4)';
+                document.getElementById('carbs-count').innerText = currentPlate.carbs + 'г';
+            } else if (sector === 'fats') {
+                currentPlate.fats += 30; // Жиров берем поменьше порцию
+                document.getElementById('sector-fats').style.backgroundColor = 'rgba(234, 179, 8, 0.4)';
             }
 
-            // Убираем оверлей сканирования
-            document.getElementById('scanner-overlay').classList.add('hidden');
+            currentPlate.calories += Math.round(cals);
+            if (!currentPlate.items.includes(name)) {
+                currentPlate.items.push(name);
+            }
 
-            if (!success) {
-                showNotification('Не удалось связаться с ИИ. Попробуйте еще раз!', 'error');
+            updatePlateUI();
+            showNotification(`Добавлено на тарелку: ${name} 👍`);
+        }
+
+        function updatePlateUI() {
+            document.getElementById('plate-calories').innerText = `${currentPlate.calories} ккал`;
+            
+            // Расчет приблизительных БЖУ на основе веса секторов
+            let totalB = Math.round(currentPlate.protein * 0.18 + currentPlate.fiber * 0.02 + currentPlate.carbs * 0.04);
+            let totalJ = Math.round(currentPlate.fats * 0.5 + currentPlate.protein * 0.05);
+            let totalU = Math.round(currentPlate.carbs * 0.25 + currentPlate.fiber * 0.03);
+
+            document.getElementById('plate-macros').innerText = `Б: ${totalB}г | Ж: ${totalJ}г | У: ${totalU}г`;
+
+            // Умная нутрициологическая оценка баланса на тарелке
+            const ratingLabel = document.getElementById('plate-rating');
+            
+            if (currentPlate.items.length === 0) {
+                ratingLabel.innerText = "Баланс: Соберите тарелку";
+                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-slate-800 text-slate-400 text-[10px] font-black uppercase";
                 return;
             }
 
-            try {
-                // Парсим полученный от Gemini структурированный JSON
-                const parsedResult = JSON.parse(resultText);
-                
-                // Переключаем на вкладку ИИ-Помощника для красивого вывода результатов
-                switchTab('ai');
-                
-                const card = document.getElementById('scan-result-card');
-                card.classList.remove('hidden');
-                
-                document.getElementById('scan-rating').innerText = parsedResult.rating || "A";
-                document.getElementById('scan-name').innerText = parsedResult.name || "Распознанное блюдо";
-                document.getElementById('scan-macros').innerText = `${parsedResult.calories || 200} ккал | Б: ${parsedResult.macros?.p || 10}г | Ж: ${parsedResult.macros?.f || 10}г | У: ${parsedResult.macros?.c || 20}г`;
-                document.getElementById('scan-verdict').innerText = parsedResult.verdict || "ИИ успешно распознал блюдо на фотографии.";
+            // Логика золотого сечения Гарвардской тарелки
+            const hasFiber = currentPlate.fiber > 0;
+            const hasProtein = currentPlate.protein > 0;
+            const hasCarbs = currentPlate.carbs > 0;
 
-                // Кнопка добавления в дневник
-                document.getElementById('add-scanned-btn').onclick = () => {
-                    const mealCals = parsedResult.calories || 200;
-                    meals.push({
-                        id: Date.now(),
-                        type: 'Обед',
-                        name: parsedResult.name || "Распознанное блюдо",
-                        calories: mealCals
-                    });
-                    todayCalories += mealCals;
-                    card.classList.add('hidden');
-                    renderMeals(); 
-                    recalculateProgress(); 
-                    saveToStorage(); 
-                    switchTab('tracker');
-                    showNotification(`Блюдо "${parsedResult.name}" добавлено в дневник! 🥗`);
-                };
-
-                showNotification('ИИ успешно расшифровал состав снимка! 🎉');
-
-            } catch (err) {
-                showNotification('Ошибка обработки ответа ИИ. Попробуйте другое фото.', 'error');
+            if (hasFiber && hasProtein && hasCarbs) {
+                ratingLabel.innerText = "Идеальный баланс! Оценка: A+ 👑";
+                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase";
+            } else if (hasFiber && hasProtein) {
+                ratingLabel.innerText = "Низкоуглеводный баланс. Оценка: A";
+                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-teal-500/20 text-teal-400 text-[10px] font-black uppercase";
+            } else if (hasProtein && hasCarbs) {
+                ratingLabel.innerText = "Мало клетчатки! Оценка: B- ⚠️";
+                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[10px] font-black uppercase";
+            } else {
+                ratingLabel.innerText = "Не сбалансировано. Оценка: C";
+                ratingLabel.className = "inline-block px-2.5 py-0.5 rounded bg-red-500/20 text-red-400 text-[10px] font-black uppercase";
             }
+        }
+
+        function eatPlate() {
+            if (currentPlate.items.length === 0) {
+                alert("Сначала добавьте хотя бы один ингредиент на тарелку!");
+                return;
+            }
+
+            const dishName = `Конструктор: ${currentPlate.items.slice(0, 3).join(' + ')}` + (currentPlate.items.length > 3 ? '...' : '');
+            
+            meals.push({
+                id: Date.now(),
+                type: 'Обед',
+                name: dishName,
+                calories: currentPlate.calories
+            });
+            todayCalories += currentPlate.calories;
+
+            saveToStorage();
+            renderMeals();
+            recalculateProgress();
+            closePlateConstructor();
+            resetPlate();
+
+            showNotification('Тарелка здоровья успешно добавлена в Дневник! 🥗🍽️');
+            switchTab('tracker');
         }
 
         // ИИ-КОНСТРУКТОР МЕНЮ
@@ -1195,7 +1236,6 @@
             }, 2000);
         }
 
-        // Добавить сообщение чата
         function addChatMessage(text, role) {
             const box = document.getElementById('chat-box');
             if(role === 'user') {
@@ -1211,12 +1251,10 @@
             document.getElementById('confirm-modal').classList.remove('hidden');
         }
 
-        // Скрыть окно сброса
         function hideResetModal() {
             document.getElementById('confirm-modal').classList.add('hidden');
         }
 
-        // Подтвердить сброс
         function confirmReset() {
             localStorage.clear();
             profile = {...defaultProfile};
