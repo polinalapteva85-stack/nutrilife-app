@@ -125,9 +125,9 @@
                 <button onclick="resetPlate()" class="text-[10px] font-bold text-slate-400 hover:text-white uppercase">Сброс</button>
             </div>
 
-            <!-- Концентрические Кольца Нутриентов (Вместо старой тарелки) -->
+            <!-- Концентрические Кольца Нутриентов -->
             <div class="my-4 flex flex-col items-center">
-                <div class="relative w-56 h-56 flex items-center justify-center">
+                <div class="relative w-44 h-44 flex items-center justify-center">
                     
                     <!-- SVG Кольца баланса -->
                     <svg class="absolute w-full h-full" viewBox="0 0 220 220">
@@ -153,15 +153,15 @@
                     </svg>
 
                     <!-- Центральная тарелка с эмодзи еды -->
-                    <div id="central-plate" class="w-24 h-24 rounded-full bg-slate-900 border-4 border-slate-800 flex flex-wrap items-center justify-center p-2 gap-1.5 shadow-2xl z-10 overflow-hidden">
-                        <span id="plate-placeholder-icon" class="text-3xl">🍽️</span>
+                    <div id="central-plate" class="w-20 h-20 rounded-full bg-slate-900 border-4 border-slate-800 flex flex-wrap items-center justify-center p-2 gap-1.5 shadow-2xl z-10 overflow-hidden">
+                        <span id="plate-placeholder-icon" class="text-2xl">🍽️</span>
                     </div>
                 </div>
 
                 <!-- Панель КБЖУ со шкалами -->
-                <div class="mt-2 text-center w-full max-w-[280px] space-y-1.5">
-                    <span id="plate-rating" class="inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-wider">Наполните тарелку</span>
-                    <h4 id="plate-calories" class="text-xl font-black text-white">0 ккал</h4>
+                <div class="mt-2 text-center w-full max-w-[280px] space-y-1">
+                    <span id="plate-rating" class="inline-block px-3 py-0.5 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-wider">Наполните тарелку</span>
+                    <h4 id="plate-calories" class="text-base font-black text-white">0 ккал</h4>
                     
                     <!-- Цифровые метки граммовок нутриентов -->
                     <div class="flex justify-between text-[10px] font-bold text-slate-400 pt-1">
@@ -172,80 +172,66 @@
                 </div>
             </div>
 
-            <!-- Ингредиенты для выбора (Группировка по категориям) -->
-            <div class="space-y-4 flex-1 overflow-y-auto max-h-[220px] custom-scroll px-1">
-                
-                <!-- Овощи и зелень (50%) -->
-                <div class="space-y-2">
+            <!-- Поиск и Добавление своего продукта (Новое!) -->
+            <div class="space-y-2 px-1">
+                <!-- Живой Смарт-поиск -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                    </span>
+                    <input type="text" id="plate-search" oninput="renderPlateIngredients()" placeholder="Поиск продукта на тарелку..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white placeholder-slate-500">
+                </div>
+
+                <!-- Интерактивная форма создания своего продукта -->
+                <div class="bg-slate-900/40 border border-slate-800 p-3 rounded-2xl space-y-2">
+                    <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest block"><i class="fa-solid fa-plus text-emerald-400 mr-1"></i> Добавить свой продукт</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="text" id="custom-plate-name" placeholder="Например: Банан" class="bg-slate-950 border border-slate-850 rounded-xl px-2.5 py-1.5 text-[10px] focus:outline-none focus:border-emerald-500 text-white">
+                        <select id="custom-plate-sector" class="bg-slate-950 border border-slate-850 rounded-xl px-2.5 py-1.5 text-[10px] focus:outline-none focus:border-emerald-500 text-slate-300">
+                            <option value="fiber">🥗 Клетчатка</option>
+                            <option value="protein">🍗 Белок</option>
+                            <option value="carbs">🍚 Углеводы</option>
+                            <option value="fats">🥑 Жиры</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <input type="number" id="custom-plate-cals" placeholder="Калории на 100г" class="bg-slate-950 border border-slate-850 rounded-xl px-2.5 py-1.5 text-[10px] focus:outline-none focus:border-emerald-500 text-white">
+                        <button onclick="addCustomPlateFood()" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase py-1.5 transition-all flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-square-plus"></i> Создать
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ингредиенты для выбора (Динамический контейнер!) -->
+            <div class="space-y-4 flex-1 overflow-y-auto max-h-[190px] custom-scroll px-1 mt-2" id="plate-ingredients-list-container">
+                <!-- Категория: Клетчатка -->
+                <div id="cat-fiber-container" class="space-y-1.5">
                     <span class="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block"><i class="fa-solid fa-carrot"></i> Клетчатка (Цель: 50% тарелки)</span>
-                    <div class="grid grid-cols-2 gap-1.5">
-                        <button onclick="addIngredientToPlate('Брокколи', 'fiber', '🥦', 25, 1.2, 0.2, 2.5)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🥦</span> Брокколи <span class="ml-auto text-emerald-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Томаты', 'fiber', '🍅', 18, 0.6, 0.1, 3.8)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🍅</span> Томаты <span class="ml-auto text-emerald-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Шпинат', 'fiber', '🥬', 23, 2.9, 0.3, 3.6)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🥬</span> Шпинат <span class="ml-auto text-emerald-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Огурец', 'fiber', '🥒', 15, 0.8, 0.1, 2.8)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🥒</span> Огурец <span class="ml-auto text-emerald-400">+100г</span>
-                        </button>
-                    </div>
+                    <div id="container-fiber-list" class="grid grid-cols-2 gap-1.5"></div>
                 </div>
 
-                <!-- Белки (25%) -->
-                <div class="space-y-2">
+                <!-- Категория: Белки -->
+                <div id="cat-protein-container" class="space-y-1.5">
                     <span class="text-[9px] font-bold text-orange-400 uppercase tracking-widest block"><i class="fa-solid fa-egg"></i> Протеин / Белки (Цель: 25% тарелки)</span>
-                    <div class="grid grid-cols-2 gap-1.5">
-                        <button onclick="addIngredientToPlate('Курица', 'protein', '🍗', 113, 23.6, 1.9, 0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🍗</span> Куриное филе <span class="ml-auto text-orange-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Яйцо', 'protein', '🥚', 74, 6.3, 5.3, 0.4)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🥚</span> Яйцо вареное <span class="ml-auto text-orange-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Лосось', 'protein', '🐟', 142, 19.8, 6.3, 0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🐟</span> Лосось <span class="ml-auto text-orange-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Тофу', 'protein', '🧈', 76, 8.1, 4.8, 1.9)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🧈</span> Тофу <span class="ml-auto text-orange-400">+100г</span>
-                        </button>
-                    </div>
+                    <div id="container-protein-list" class="grid grid-cols-2 gap-1.5"></div>
                 </div>
 
-                <!-- Сложные углеводы (25%) -->
-                <div class="space-y-2">
+                <!-- Категория: Углеводы -->
+                <div id="cat-carbs-container" class="space-y-1.5">
                     <span class="text-[9px] font-bold text-amber-400 uppercase tracking-widest block"><i class="fa-solid fa-wheat-awn"></i> Сложные Углеводы (Цель: 25% тарелки)</span>
-                    <div class="grid grid-cols-2 gap-1.5">
-                        <button onclick="addIngredientToPlate('Киноа', 'carbs', '🍚', 120, 4.4, 1.9, 21.3)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🍚</span> Киноа <span class="ml-auto text-amber-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Бурый Рис', 'carbs', '🌾', 111, 2.6, 0.9, 23.1)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🌾</span> Бурый рис <span class="ml-auto text-amber-400">+100г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Гречка', 'carbs', '🤎', 132, 4.5, 2.3, 25.0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🤎</span> Гречка <span class="ml-auto text-amber-400">+100г</span>
-                        </button>
-                    </div>
+                    <div id="container-carbs-list" class="grid grid-cols-2 gap-1.5"></div>
                 </div>
 
-                <!-- Полезные жиры (Опция) -->
-                <div class="space-y-2">
+                <!-- Категория: Жиры -->
+                <div id="cat-fats-container" class="space-y-1.5">
                     <span class="text-[9px] font-bold text-yellow-500 uppercase tracking-widest block"><i class="fa-solid fa-oil-can"></i> Полезные Жиры (Дополнение)</span>
-                    <div class="grid grid-cols-2 gap-1.5">
-                        <button onclick="addIngredientToPlate('Авокадо', 'fats', '🥑', 160, 2.0, 14.7, 8.5)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🥑</span> Авокадо <span class="ml-auto text-yellow-500">+30г</span>
-                        </button>
-                        <button onclick="addIngredientToPlate('Оливковое Масло', 'fats', '🏺', 120, 0, 14, 0)" class="active-scale text-left p-2 bg-slate-900 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-2">
-                            <span class="text-base">🏺</span> Масло оливк. <span class="ml-auto text-yellow-500">+15г</span>
-                        </button>
-                    </div>
+                    <div id="container-fats-list" class="grid grid-cols-2 gap-1.5"></div>
                 </div>
-
             </div>
 
             <!-- Кнопка «Съесть» -->
-            <button onclick="eatPlate()" class="active-scale mt-3 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
+            <button onclick="eatPlate()" class="active-scale mt-2 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
                 <i class="fa-solid fa-circle-check"></i> Съесть блюдо и внести в дневник
             </button>
         </div>
@@ -631,12 +617,36 @@
 
     <!-- ЛОГИКА ПРИЛОЖЕНИЯ -->
     <script>
-        // Дефолтные настройки
-        const defaultProfile = {
-            name: 'Екатерина', weight: 60, height: 168, age: 27,
-            gender: 'female', goal: 'lose', activity: 1.55,
-            calorieGoal: 1750, waterGoal: 2000
-        };
+        // Стартовая база продуктов для конструктора (Гарвардский метод)
+        let constructorFoods = [
+            // Клетчатка (Зеленые)
+            { name: 'Брокколи', sector: 'fiber', emoji: '🥦', cals: 25, p: 1.2, f: 0.2, c: 2.5 },
+            { name: 'Томаты Черри', sector: 'fiber', emoji: '🍅', cals: 18, p: 0.6, f: 0.1, c: 3.8 },
+            { name: 'Шпинат свежий', sector: 'fiber', emoji: '🥬', cals: 23, p: 2.9, f: 0.3, c: 3.6 },
+            { name: 'Огурец хрустящий', sector: 'fiber', emoji: '🥒', cals: 15, p: 0.8, f: 0.1, c: 2.8 },
+            { name: 'Свежая морковь', sector: 'fiber', emoji: '🥕', cals: 41, p: 0.9, f: 0.2, c: 9.6 },
+            { name: 'Болгарский перец', sector: 'fiber', emoji: '🫑', cals: 20, p: 0.9, f: 0.2, c: 4.6 },
+            { name: 'Зеленое яблоко', sector: 'fiber', emoji: '🍎', cals: 52, p: 0.3, f: 0.2, c: 14 },
+            { name: 'Свежая голубика', sector: 'fiber', emoji: '🫐', cals: 57, p: 0.7, f: 0.3, c: 14 },
+            // Белки (Оранжевые)
+            { name: 'Куриное филе', sector: 'protein', emoji: '🍗', cals: 113, p: 23.6, f: 1.9, c: 0 },
+            { name: 'Яйцо вареное', sector: 'protein', emoji: '🥚', cals: 74, p: 6.3, f: 5.3, c: 0.4 },
+            { name: 'Лосось на гриле', sector: 'protein', emoji: '🐟', cals: 142, p: 19.8, f: 6.3, c: 0 },
+            { name: 'Органический Тофу', sector: 'protein', emoji: '🧈', cals: 76, p: 8.1, f: 4.8, c: 1.9 },
+            { name: 'Постная говядина', sector: 'protein', emoji: '🥩', cals: 150, p: 26, f: 6, c: 0 },
+            { name: 'Креветки на пару', sector: 'protein', emoji: '🍤', cals: 99, p: 24, f: 0.3, c: 0.2 },
+            { name: 'Творог органический 5%', sector: 'protein', emoji: '🥛', cals: 121, p: 17, f: 5, c: 3 },
+            // Сложные углеводы (Желтые)
+            { name: 'Отварная Киноа', sector: 'carbs', emoji: '🍚', cals: 120, p: 4.4, f: 1.9, c: 21.3 },
+            { name: 'Бурый цельный рис', sector: 'carbs', emoji: '🌾', cals: 111, p: 2.6, f: 0.9, c: 23.1 },
+            { name: 'Зеленая гречка', sector: 'carbs', emoji: '🤎', cals: 132, p: 4.5, f: 2.3, c: 25.0 },
+            { name: 'Овсянка долгой варки', sector: 'carbs', emoji: '🥣', cals: 389, p: 16.9, f: 6.9, c: 66 },
+            { name: 'Запеченный батат', sector: 'carbs', emoji: '🍠', cals: 86, p: 1.6, f: 0.1, c: 20 },
+            // Полезные жиры
+            { name: 'Спелое Авокадо', sector: 'fats', emoji: '🥑', cals: 160, p: 2.0, f: 14.7, c: 8.5 },
+            { name: 'Оливковое масло холодного отжима', sector: 'fats', emoji: '🏺', cals: 120, p: 0, f: 14, c: 0 },
+            { name: 'Орехи миндаль', sector: 'fats', emoji: '🥜', cals: 160, p: 6, f: 14, c: 6 }
+        ];
 
         let profile = {...defaultProfile};
         let todayCalories = 0;
@@ -690,6 +700,7 @@
             const savedWater = localStorage.getItem('nutri_water');
             const savedSteps = localStorage.getItem('nutri_steps');
             const savedIngredients = localStorage.getItem('nutri_fridge');
+            const savedCustomPlateFoods = localStorage.getItem('nutri_custom_plate_foods');
 
             if (savedProfile) profile = JSON.parse(savedProfile);
             if (savedMeals) {
@@ -708,6 +719,17 @@
                 fridgeIngredients = JSON.parse(savedIngredients);
             } else {
                 fridgeIngredients = ['Яйца', 'Курица', 'Томаты']; 
+            }
+
+            // Загружаем сохраненные кастомные продукты в конструктор
+            if (savedCustomPlateFoods) {
+                const customPlateFoods = JSON.parse(savedCustomPlateFoods);
+                // Соединяем базовый список с пользовательским, отсекая возможные дубликаты
+                customPlateFoods.forEach(cf => {
+                    if (!constructorFoods.some(f => f.name === cf.name)) {
+                        constructorFoods.push(cf);
+                    }
+                });
             }
 
             // Заполнение полей в интерфейсе профиля
@@ -778,6 +800,7 @@
             if(shouldSave) saveToStorage();
         }
 
+        // Сборка цели
         function setGoal(goalId, shouldSave = true) {
             profile.goal = goalId;
             ['lose', 'keep', 'gain'].forEach(g => {
@@ -1029,7 +1052,7 @@
                                 ${rec.steps}
                             </div>
                             <button onclick="cookRecipe('${rec.title}', ${rec.calories})" class="active-scale w-full bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-utensils"></i> Я приготовил это! (+${rec.calories} ккал)
+                                <i class="fa-solid fa-utensils"></i> Я приготовил это! (+${rec.cals} ккал)
                             </button>
                         </div>
                     `;
@@ -1131,13 +1154,117 @@
             });
         }
 
-        // ЛОГИКА СМАРТ-КОНСТРУКТОРА ТАРЕЛКИ (Новое!)
+        // ЛОГИКА СМАРТ-КОНСТРУКТОРА ТАРЕЛКИ
         function openPlateConstructor() {
             document.getElementById('plate-modal').classList.remove('hidden');
+            renderPlateIngredients(); // Рендерим актуальный список
         }
 
         function closePlateConstructor() {
             document.getElementById('plate-modal').classList.add('hidden');
+        }
+
+        // Динамический умный рендеринг списка ингредиентов с учетом фильтра поиска (Новое!)
+        function renderPlateIngredients() {
+            const searchQuery = document.getElementById('plate-search').value.toLowerCase().trim();
+            
+            // Получаем контейнеры категорий БЖУ
+            const fiberList = document.getElementById('container-fiber-list');
+            const proteinList = document.getElementById('container-protein-list');
+            const carbsList = document.getElementById('container-carbs-list');
+            const fatsList = document.getElementById('container-fats-list');
+
+            // Очищаем списки перед сборкой
+            fiberList.innerHTML = '';
+            proteinList.innerHTML = '';
+            carbsList.innerHTML = '';
+            fatsList.innerHTML = '';
+
+            let matchedCounts = { fiber: 0, protein: 0, carbs: 0, fats: 0 };
+
+            constructorFoods.forEach(food => {
+                // Если задан поисковый запрос, фильтруем по имени
+                if (searchQuery && !food.name.toLowerCase().includes(searchQuery)) {
+                    return; 
+                }
+
+                matchedCounts[food.sector]++;
+
+                const buttonHTML = `
+                    <button onclick="addIngredientToPlate('${food.name}', '${food.sector}', '${food.emoji}', ${food.cals}, ${food.p}, ${food.f}, ${food.c})" class="active-scale text-left p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-1.5 w-full transition-all">
+                        <span class="text-base">${food.emoji}</span>
+                        <span class="truncate flex-1">${food.name}</span>
+                        <span class="text-[8px] opacity-75 ${food.sector === 'fiber' ? 'text-emerald-400' : food.sector === 'protein' ? 'text-orange-400' : food.sector === 'carbs' ? 'text-amber-400' : 'text-yellow-500'}">+100г</span>
+                    </button>
+                `;
+
+                if (food.sector === 'fiber') fiberList.innerHTML += buttonHTML;
+                else if (food.sector === 'protein') proteinList.innerHTML += buttonHTML;
+                else if (food.sector === 'carbs') carbsList.innerHTML += buttonHTML;
+                else if (food.sector === 'fats') fatsList.innerHTML += buttonHTML;
+            });
+
+            // Автоматически скрываем или показываем разделы, в которых есть/нет совпадений
+            document.getElementById('cat-fiber-container').style.display = matchedCounts.fiber > 0 ? 'block' : 'none';
+            document.getElementById('cat-protein-container').style.display = matchedCounts.protein > 0 ? 'block' : 'none';
+            document.getElementById('cat-carbs-container').style.display = matchedCounts.carbs > 0 ? 'block' : 'none';
+            document.getElementById('cat-fats-container').style.display = matchedCounts.fats > 0 ? 'block' : 'none';
+        }
+
+        // Функция интерактивного создания своего собственного продукта (Новое!)
+        function addCustomPlateFood() {
+            const nameInput = document.getElementById('custom-plate-name');
+            const sectorSelect = document.getElementById('custom-plate-sector');
+            const calsInput = document.getElementById('custom-plate-cals');
+
+            const name = nameInput.value.trim();
+            const sector = sectorSelect.value;
+            const cals = parseInt(calsInput.value);
+
+            if (!name) {
+                showNotification('Пожалуйста, введите название продукта!', 'error');
+                return;
+            }
+            if (isNaN(cals) || cals <= 0) {
+                showNotification('Введите корректную калорийность!', 'error');
+                return;
+            }
+
+            // Назначаем эмодзи в зависимости от выбранного сектора
+            let emoji = '🥗';
+            if (sector === 'protein') emoji = '🍗';
+            if (sector === 'carbs') emoji = '🍚';
+            if (sector === 'fats') emoji = '🥑';
+
+            const newFoodItem = {
+                name: name,
+                sector: sector,
+                emoji: emoji,
+                cals: cals,
+                p: sector === 'protein' ? 18 : (sector === 'fiber' ? 1 : 2),
+                f: sector === 'fats' ? 14 : (sector === 'protein' ? 4 : 0.5),
+                c: sector === 'carbs' ? 24 : (sector === 'fiber' ? 4 : 1)
+            };
+
+            // 1. Сохраняем в память телефона (Local Storage)
+            let savedCustom = localStorage.getItem('nutri_custom_plate_foods');
+            let customList = savedCustom ? JSON.parse(savedCustom) : [];
+            customList.push(newFoodItem);
+            localStorage.setItem('nutri_custom_plate_foods', JSON.stringify(customList));
+
+            // 2. Добавляем в текущую оперативную базу конструктора
+            constructorFoods.push(newFoodItem);
+
+            // 3. Автоматически кладем на тарелку
+            addIngredientToPlate(newFoodItem.name, newFoodItem.sector, newFoodItem.emoji, newFoodItem.cals, newFoodItem.p, newFoodItem.f, newFoodItem.c);
+
+            // Очищаем поля ввода
+            nameInput.value = '';
+            calsInput.value = '';
+
+            // Обновляем списки на экране
+            renderPlateIngredients();
+            showNotification(`Продукт "${name}" создан и добавлен на тарелку! ✨`);
         }
 
         function resetPlate() {
@@ -1168,7 +1295,6 @@
         }
 
         function addIngredientToPlate(name, sector, emoji, cals, p, f, c) {
-            // Лимит на отображение эмодзи на тарелке (не более 4-5 штук, чтобы выглядело аккуратно)
             const centralPlate = document.getElementById('central-plate');
             const placeholder = document.getElementById('plate-placeholder-icon');
             if (placeholder) {
@@ -1178,19 +1304,16 @@
             // Добавляем вес в сектор (порция по умолчанию 100г)
             if (sector === 'fiber') {
                 currentPlate.fiber += 100;
-                // Насыщение зеленого кольца на максимум при 300г
                 const percent = Math.min(100, (currentPlate.fiber / 300) * 100);
                 updateRingProgress('fiber', percent, 565.48);
                 document.getElementById('fiber-count').innerText = currentPlate.fiber + 'г';
             } else if (sector === 'protein') {
                 currentPlate.protein += 100;
-                // Насыщение оранжевого кольца на максимум при 200г
                 const percent = Math.min(100, (currentPlate.protein / 200) * 100);
                 updateRingProgress('protein', percent, 452.38);
                 document.getElementById('protein-count').innerText = currentPlate.protein + 'г';
             } else if (sector === 'carbs') {
                 currentPlate.carbs += 100;
-                // Насыщение желтого кольца на максимум при 200г
                 const percent = Math.min(100, (currentPlate.carbs / 200) * 100);
                 updateRingProgress('carbs', percent, 339.29);
                 document.getElementById('carbs-count').innerText = currentPlate.carbs + 'г';
@@ -1217,14 +1340,14 @@
         function updatePlateUI() {
             document.getElementById('plate-calories').innerText = `${currentPlate.calories} ккал`;
             
-            // Расчет приблизительных БЖУ на основе веса секторов
+            // Расчет БЖУ
             let totalB = Math.round(currentPlate.protein * 0.18 + currentPlate.fiber * 0.02 + currentPlate.carbs * 0.04);
             let totalJ = Math.round(currentPlate.fats * 0.5 + currentPlate.protein * 0.05);
             let totalU = Math.round(currentPlate.carbs * 0.25 + currentPlate.fiber * 0.03);
 
             document.getElementById('plate-macros').innerText = `Б: ${totalB}г | Ж: ${totalJ}г | У: ${totalU}г`;
 
-            // Умная нутрициологическая оценка баланса на тарелке
+            // Умная оценка баланса тарелки
             const ratingLabel = document.getElementById('plate-rating');
             
             if (currentPlate.items.length === 0) {
@@ -1331,6 +1454,12 @@
             todaySteps = 0;
             meals = [];
             fridgeIngredients = ['Яйца', 'Курица', 'Томаты'];
+            // Сбрасываем кастомные продукты
+            localStorage.removeItem('nutri_custom_plate_foods');
+            
+            // Сбрасываем к базовому набору продуктов
+            constructorFoods = constructorFoods.filter(f => !f.isCustom);
+
             hideResetModal();
             loadFromStorage();
             showNotification('Приложение сброшено до начальных настроек 🔄', 'blue');
@@ -1339,6 +1468,7 @@
         window.onload = () => {
             loadFromStorage();
             renderMeals();
+            renderPlateIngredients(); // Отрисовка списков при первом запуске
         };
     </script>
 </body>
