@@ -88,7 +88,7 @@
                 </div>
             </div>
             
-            <button onclick="showResetModal()" class="active-scale px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/20 transition-all flex items-center gap-1" title="Сбросить все данные дня">
+            <button id="header-reset-btn" class="active-scale px-2.5 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/20 transition-all flex items-center gap-1" title="Сбросить все данные дня">
                 <i class="fa-solid fa-trash-arrow-up"></i> Сброс
             </button>
         </header>
@@ -107,8 +107,8 @@
                     <p class="text-[11px] text-slate-400">Это полностью очистит все ваши трекеры, шаги, воду и холодильник.</p>
                 </div>
                 <div class="flex gap-2">
-                    <button onclick="hideResetModal()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-2.5 rounded-xl text-xs font-bold text-slate-300 transition-all">Отмена</button>
-                    <button onclick="confirmReset()" class="flex-1 bg-red-500 hover:bg-red-600 py-2.5 rounded-xl text-xs font-bold text-white transition-all">Очистить</button>
+                    <button id="modal-cancel-btn" class="flex-1 bg-slate-800 hover:bg-slate-700 py-2.5 rounded-xl text-xs font-bold text-slate-300 transition-all">Отмена</button>
+                    <button id="modal-confirm-btn" class="flex-1 bg-red-500 hover:bg-red-600 py-2.5 rounded-xl text-xs font-bold text-white transition-all">Очистить</button>
                 </div>
             </div>
         </div>
@@ -118,11 +118,11 @@
             
             <!-- Шапка конструктора -->
             <div class="flex items-center justify-between px-2">
-                <button onclick="closePlateConstructor()" class="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800">
+                <button id="close-plate-modal-btn" class="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center border border-slate-800">
                     <i class="fa-solid fa-arrow-left text-xs"></i>
                 </button>
                 <span class="text-xs font-black uppercase tracking-wider text-emerald-400">Кольца Баланса еды</span>
-                <button onclick="resetPlate()" class="text-[10px] font-bold text-slate-400 hover:text-white uppercase">Сброс</button>
+                <button id="reset-plate-btn" class="text-[10px] font-bold text-slate-400 hover:text-white uppercase">Сброс</button>
             </div>
 
             <!-- Концентрические Кольца Нутриентов -->
@@ -172,14 +172,14 @@
                 </div>
             </div>
 
-            <!-- Поиск и Добавление своего продукта (Новое!) -->
+            <!-- Поиск и Добавление своего продукта -->
             <div class="space-y-2 px-1">
                 <!-- Живой Смарт-поиск -->
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
                         <i class="fa-solid fa-magnifying-glass text-xs"></i>
                     </span>
-                    <input type="text" id="plate-search" oninput="renderPlateIngredients()" placeholder="Поиск продукта на тарелку..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white placeholder-slate-500">
+                    <input type="text" id="plate-search" placeholder="Поиск продукта на тарелку..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white placeholder-slate-500">
                 </div>
 
                 <!-- Интерактивная форма создания своего продукта -->
@@ -196,7 +196,7 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <input type="number" id="custom-plate-cals" placeholder="Калории на 100г" class="bg-slate-950 border border-slate-850 rounded-xl px-2.5 py-1.5 text-[10px] focus:outline-none focus:border-emerald-500 text-white">
-                        <button onclick="addCustomPlateFood()" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase py-1.5 transition-all flex items-center justify-center gap-1">
+                        <button id="add-custom-food-btn" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-[10px] font-black uppercase py-1.5 transition-all flex items-center justify-center gap-1">
                             <i class="fa-solid fa-square-plus"></i> Создать
                         </button>
                     </div>
@@ -231,7 +231,7 @@
             </div>
 
             <!-- Кнопка «Съесть» -->
-            <button onclick="eatPlate()" class="active-scale mt-2 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
+            <button id="eat-plate-btn" class="active-scale mt-2 w-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1">
                 <i class="fa-solid fa-circle-check"></i> Съесть блюдо и внести в дневник
             </button>
         </div>
@@ -326,16 +326,16 @@
 
                 <!-- Блок быстрого добавления активностей -->
                 <div class="grid grid-cols-2 gap-2">
-                    <button onclick="addWater()" class="active-scale bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-300 p-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all">
+                    <button id="quick-water-btn" class="active-scale bg-blue-600/20 hover:bg-blue-600/30 border border-blue-500/30 text-blue-300 p-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all">
                         <i class="fa-solid fa-plus text-[10px]"></i> 🥛 Вода +250мл
                     </button>
-                    <button onclick="addSteps()" class="active-scale bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all">
+                    <button id="quick-steps-btn" class="active-scale bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl flex items-center justify-center gap-2 text-xs font-bold transition-all">
                         <i class="fa-solid fa-person-running text-[10px]"></i> 🏃‍♂️ +2000 шагов
                     </button>
                 </div>
 
                 <!-- Интерактивный баннер ИИ-Холодильника -->
-                <div onclick="switchTab('fridge')" class="active-scale bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between cursor-pointer hover:opacity-90 transition-all shadow-lg shadow-emerald-500/10">
+                <div id="fridge-banner" class="active-scale bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-500/30 p-4 rounded-2xl flex items-center justify-between cursor-pointer hover:opacity-90 transition-all shadow-lg shadow-emerald-500/10">
                   <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white text-lg">
                       <i class="fa-solid fa-snowflake animate-spin" style="animation-duration: 10s;"></i>
@@ -358,7 +358,7 @@
                     Соберите свою идеальную тарелку по Гарвардскому золотому методу (50% овощей, 25% белка, 25% углеводов). Наш алгоритм рассчитает баланс БЖУ:
                   </p>
                   
-                  <button onclick="openPlateConstructor()" class="active-scale w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl text-xs font-extrabold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2">
+                  <button id="open-plate-modal-btn" class="active-scale w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white rounded-xl text-xs font-extrabold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2">
                       <i class="fa-solid fa-puzzle-piece"></i> 🍽️ Собрать тарелку здоровья
                   </button>
                 </div>
@@ -372,7 +372,7 @@
                     <h2 class="text-base font-bold text-white">Дневник питания</h2>
                     <p class="text-[10px] text-slate-400">Добавлено приемов пищи: <span id="meals-count">0</span></p>
                   </div>
-                  <button onclick="toggleAddMealForm()" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-all">
+                  <button id="add-meal-toggle-btn" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-all">
                     <i class="fa-solid fa-plus"></i> Добавить еду
                   </button>
                 </div>
@@ -380,10 +380,10 @@
                 <!-- Форма добавления нового блюда -->
                 <div id="add-meal-form" class="hidden bg-slate-800/50 border border-slate-700/50 p-4 rounded-2xl space-y-3">
                   <div class="grid grid-cols-4 gap-1">
-                    <button onclick="setNewMealType('Завтрак')" id="btn-type-breakfast" class="active-scale type-btn py-1 rounded bg-emerald-500 text-white text-[9px] font-bold">Завтрак</button>
-                    <button onclick="setNewMealType('Обед')" id="btn-type-lunch" class="active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold">Обед</button>
-                    <button onclick="setNewMealType('Ужин')" id="btn-type-dinner" class="active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold">Ужин</button>
-                    <button onclick="setNewMealType('Перекус')" id="btn-type-snack" class="active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold">Перекус</button>
+                    <button id="type-breakfast-btn" class="active-scale type-btn py-1 rounded bg-emerald-500 text-white text-[9px] font-bold">Завтрак</button>
+                    <button id="type-lunch-btn" class="active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold">Обед</button>
+                    <button id="type-dinner-btn" class="active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold">Ужин</button>
+                    <button id="type-snack-btn" class="active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold">Перекус</button>
                   </div>
                   <div>
                     <input type="text" id="new-meal-name" placeholder="Название блюда..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
@@ -392,8 +392,8 @@
                     <input type="number" id="new-meal-calories" placeholder="Калорийность (ккал)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
                   </div>
                   <div class="flex gap-2">
-                    <button onclick="toggleAddMealForm()" class="active-scale flex-1 bg-slate-800 py-1.5 rounded-xl text-xs font-bold text-slate-400">Отмена</button>
-                    <button onclick="saveMeal()" class="active-scale flex-1 bg-emerald-500 py-1.5 rounded-xl text-xs font-bold text-white shadow-md shadow-emerald-500/10">Сохранить</button>
+                    <button id="cancel-meal-btn" class="active-scale flex-1 bg-slate-800 py-1.5 rounded-xl text-xs font-bold text-slate-400">Отмена</button>
+                    <button id="save-meal-btn" class="active-scale flex-1 bg-emerald-500 py-1.5 rounded-xl text-xs font-bold text-white shadow-md shadow-emerald-500/10">Сохранить</button>
                   </div>
                 </div>
 
@@ -420,7 +420,7 @@
                 <div class="bg-slate-800/30 border border-slate-800 p-4 rounded-2xl space-y-3">
                     <div class="flex gap-2">
                         <input type="text" id="ingredient-input" placeholder="Добавить продукт (например: Лук)..." class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
-                        <button onclick="addCustomIngredient()" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white px-3.5 rounded-xl text-xs font-bold transition-all">
+                        <button id="add-fridge-item-btn" class="active-scale bg-emerald-500 hover:bg-emerald-600 text-white px-3.5 rounded-xl text-xs font-bold transition-all">
                             <i class="fa-solid fa-plus"></i>
                         </button>
                     </div>
@@ -429,14 +429,14 @@
                     <div class="space-y-2">
                         <span class="text-[8px] uppercase tracking-wider font-bold text-slate-400 block">Быстрый клик:</span>
                         <div class="flex flex-wrap gap-1">
-                            <button onclick="toggleFastIngredient('Курица')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-drumstick-bite text-orange-400"></i> Курица</button>
-                            <button onclick="toggleFastIngredient('Яйца')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-egg text-yellow-400"></i> Яйца</button>
-                            <button onclick="toggleFastIngredient('Томаты')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-pepper-hot text-red-400"></i> Томаты</button>
-                            <button onclick="toggleFastIngredient('Сыр')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cheese text-amber-400"></i> Сыр</button>
-                            <button onclick="toggleFastIngredient('Огурец')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-leaf text-green-400"></i> Огурец</button>
-                            <button onclick="toggleFastIngredient('Рис')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-bowl-rice text-indigo-400"></i> Рис</button>
-                            <button onclick="toggleFastIngredient('Молоко')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cow text-teal-400"></i> Milk</button>
-                            <button onclick="toggleFastIngredient('Лук')" class="active-scale px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-seedling text-yellow-600"></i> Лук</button>
+                            <button data-item="Курица" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-drumstick-bite text-orange-400"></i> Курица</button>
+                            <button data-item="Яйца" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-egg text-yellow-400"></i> Яйца</button>
+                            <button data-item="Томаты" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-pepper-hot text-red-400"></i> Томаты</button>
+                            <button data-item="Сыр" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cheese text-amber-400"></i> Сыр</button>
+                            <button data-item="Огурец" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-leaf text-green-400"></i> Огурец</button>
+                            <button data-item="Рис" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-bowl-rice text-indigo-400"></i> Рис</button>
+                            <button data-item="Молоко" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-cow text-teal-400"></i> Milk</button>
+                            <button data-item="Лук" class="fast-click-item px-2.5 py-1 bg-slate-900 hover:bg-slate-800 rounded-lg text-[9px] font-bold border border-slate-800 flex items-center gap-1"><i class="fa-solid fa-seedling text-yellow-600"></i> Лук</button>
                         </div>
                     </div>
 
@@ -451,7 +451,7 @@
                 </div>
 
                 <!-- Кнопка генерации рецептов -->
-                <button onclick="findFridgeRecipes()" class="active-scale w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1.5">
+                <button id="find-recipes-btn" class="active-scale w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-3 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1.5">
                     <i class="fa-solid fa-wand-magic-sparkles"></i> Составить умное меню по продуктам
                 </button>
 
@@ -475,7 +475,7 @@
                     <p class="text-[10px] text-slate-400 leading-relaxed">
                         Генерация персонального сбалансированного меню на день под вашу норму калорий (<span class="font-bold text-white" id="ai-constructor-cal">1750</span> ккал).
                     </p>
-                    <button onclick="generateAiMenu()" class="active-scale w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1.5">
+                    <button id="generate-menu-btn" class="active-scale w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-1.5">
                         <i class="fa-solid fa-utensils text-[10px]"></i> Сгенерировать рацион на сегодня
                     </button>
                     
@@ -508,7 +508,7 @@
 
                 <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 p-2 rounded-xl">
                   <input type="text" id="chat-input" placeholder="Задайте вопрос по питанию..." class="flex-1 bg-transparent px-2 py-1 text-xs text-white placeholder-slate-500 focus:outline-none">
-                  <button onclick="sendMessage()" class="active-scale w-8 h-8 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center transition-all">
+                  <button id="send-chat-btn" class="active-scale w-8 h-8 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center transition-all">
                     <i class="fa-solid fa-paper-plane text-xs"></i>
                   </button>
                 </div>
@@ -525,49 +525,49 @@
                 <div class="bg-slate-800/30 border border-slate-800 p-4 rounded-2xl space-y-3.5">
                   <div>
                     <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Ваше Имя</label>
-                    <input type="text" id="user-name" value="Екатерина" oninput="updateProfile()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
+                    <input type="text" id="user-name" value="Екатерина" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
                   </div>
 
                   <div class="grid grid-cols-2 gap-3">
                     <div>
                       <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Пол</label>
-                      <select id="user-gender" onchange="updateProfile()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white bg-slate-900">
+                      <select id="user-gender" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white bg-slate-900">
                         <option value="female">Женский</option>
                         <option value="male">Мужской</option>
                       </select>
                     </div>
                     <div>
                       <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Возраст (лет)</label>
-                      <input type="number" id="user-age" value="27" oninput="updateProfile()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
+                      <input type="number" id="user-age" value="27" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
                     </div>
                   </div>
 
                   <div class="grid grid-cols-2 gap-3">
                     <div>
                       <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Рост (см)</label>
-                      <input type="number" id="user-height" value="168" oninput="updateProfile()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
+                      <input type="number" id="user-height" value="168" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
                     </div>
                     <div>
                       <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Вес (кг)</label>
-                      <input type="number" id="user-weight" value="60" oninput="updateProfile()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
+                      <input type="number" id="user-weight" value="60" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white">
                     </div>
                   </div>
 
                   <div>
                     <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Главная цель</label>
                     <div class="grid grid-cols-3 gap-2">
-                      <button onclick="setGoal('lose')" id="btn-goal-lose" class="active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black transition-all border bg-emerald-500 text-white border-emerald-500">Похудение</button>
-                      <button onclick="setGoal('keep')" id="btn-goal-keep" class="active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black transition-all border bg-slate-900 text-slate-400 border-slate-800">Баланс</button>
-                      <button onclick="setGoal('gain')" id="btn-goal-gain" class="active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black transition-all border bg-slate-900 text-slate-400 border-slate-800">Набор</button>
+                      <button id="btn-goal-lose" class="active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black transition-all border">Похудение</button>
+                      <button id="btn-goal-keep" class="active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black transition-all border">Баланс</button>
+                      <button id="btn-goal-gain" class="active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black transition-all border">Набор</button>
                     </div>
                   </div>
 
                   <div>
                     <label class="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Активность</label>
-                    <select id="user-activity" onchange="updateProfile()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white bg-slate-900">
+                    <select id="user-activity" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3 py-2 text-xs font-semibold focus:outline-none focus:border-emerald-500 text-white bg-slate-900">
                       <option value="1.2">Минимальная (сидячая)</option>
                       <option value="1.375">Умеренная (1-3 тренировки в нед.)</option>
-                      <option value="1.55" selected>Средняя (3-5 тренировок в нед.)</option>
+                      <option value="1.55">Средняя (3-5 тренировок в нед.)</option>
                       <option value="1.725">Высокая (ежедневный спорт)</option>
                     </select>
                   </div>
@@ -590,886 +590,1031 @@
 
         <!-- ТАБ-БАР (НИЖНЯЯ НАВИГАЦИЯ) -->
         <nav class="absolute bottom-0 left-0 right-0 h-20 bg-slate-900/95 backdrop-blur-md border-t border-slate-800/80 flex items-center justify-around px-1 pb-4 pt-1 z-40">
-          <button onclick="switchTab('home')" id="nav-home" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-emerald-400">
+          <button id="nav-btn-home" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-emerald-400">
             <i class="fa-solid fa-house text-sm mb-1"></i>
             <span class="text-[7.5px] font-bold tracking-wide uppercase">Главная</span>
           </button>
-          <button onclick="switchTab('tracker')" id="nav-tracker" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200">
+          <button id="nav-btn-tracker" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200">
             <i class="fa-solid fa-calendar-day text-sm mb-1"></i>
             <span class="text-[7.5px] font-bold tracking-wide uppercase">Дневник</span>
           </button>
-          <button onclick="switchTab('fridge')" id="nav-fridge" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200 relative">
+          <button id="nav-btn-fridge" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200 relative">
             <i class="fa-solid fa-snowflake text-sm mb-1"></i>
             <span class="text-[7.5px] font-bold tracking-wide uppercase">Холодильник</span>
             <span id="fridge-badge" class="hidden absolute top-0.5 right-4 w-2 h-2 rounded-full bg-emerald-400"></span>
           </button>
-          <button onclick="switchTab('ai')" id="nav-ai" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200">
+          <button id="nav-btn-ai" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200">
             <i class="fa-solid fa-robot text-sm mb-1"></i>
             <span class="text-[7.5px] font-bold tracking-wide uppercase">ИИ-Помощник</span>
           </button>
-          <button onclick="switchTab('profile')" id="nav-profile" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200">
+          <button id="nav-btn-profile" class="active-scale nav-item flex flex-col items-center justify-center flex-1 transition-all text-slate-400 hover:text-slate-200">
             <i class="fa-solid fa-sliders text-sm mb-1"></i>
             <span class="text-[7.5px] font-bold tracking-wide uppercase">Профиль</span>
           </button>
         </nav>
 
-      </div>
+    </div>
 
     <!-- ЛОГИКА ПРИЛОЖЕНИЯ -->
     <script>
-        // Стартовая база продуктов для конструктора (Гарвардский метод)
-        let constructorFoods = [
-            // Клетчатка (Зеленые)
-            { name: 'Брокколи', sector: 'fiber', emoji: '🥦', cals: 25, p: 1.2, f: 0.2, c: 2.5 },
-            { name: 'Томаты Черри', sector: 'fiber', emoji: '🍅', cals: 18, p: 0.6, f: 0.1, c: 3.8 },
-            { name: 'Шпинат свежий', sector: 'fiber', emoji: '🥬', cals: 23, p: 2.9, f: 0.3, c: 3.6 },
-            { name: 'Огурец хрустящий', sector: 'fiber', emoji: '🥒', cals: 15, p: 0.8, f: 0.1, c: 2.8 },
-            { name: 'Свежая морковь', sector: 'fiber', emoji: '🥕', cals: 41, p: 0.9, f: 0.2, c: 9.6 },
-            { name: 'Болгарский перец', sector: 'fiber', emoji: '🫑', cals: 20, p: 0.9, f: 0.2, c: 4.6 },
-            { name: 'Зеленое яблоко', sector: 'fiber', emoji: '🍎', cals: 52, p: 0.3, f: 0.2, c: 14 },
-            { name: 'Свежая голубика', sector: 'fiber', emoji: '🫐', cals: 57, p: 0.7, f: 0.3, c: 14 },
-            // Белки (Оранжевые)
-            { name: 'Куриное филе', sector: 'protein', emoji: '🍗', cals: 113, p: 23.6, f: 1.9, c: 0 },
-            { name: 'Яйцо вареное', sector: 'protein', emoji: '🥚', cals: 74, p: 6.3, f: 5.3, c: 0.4 },
-            { name: 'Лосось на гриле', sector: 'protein', emoji: '🐟', cals: 142, p: 19.8, f: 6.3, c: 0 },
-            { name: 'Органический Тофу', sector: 'protein', emoji: '🧈', cals: 76, p: 8.1, f: 4.8, c: 1.9 },
-            { name: 'Постная говядина', sector: 'protein', emoji: '🥩', cals: 150, p: 26, f: 6, c: 0 },
-            { name: 'Креветки на пару', sector: 'protein', emoji: '🍤', cals: 99, p: 24, f: 0.3, c: 0.2 },
-            { name: 'Творог органический 5%', sector: 'protein', emoji: '🥛', cals: 121, p: 17, f: 5, c: 3 },
-            // Сложные углеводы (Желтые)
-            { name: 'Отварная Киноа', sector: 'carbs', emoji: '🍚', cals: 120, p: 4.4, f: 1.9, c: 21.3 },
-            { name: 'Бурый цельный рис', sector: 'carbs', emoji: '🌾', cals: 111, p: 2.6, f: 0.9, c: 23.1 },
-            { name: 'Зеленая гречка', sector: 'carbs', emoji: '🤎', cals: 132, p: 4.5, f: 2.3, c: 25.0 },
-            { name: 'Овсянка долгой варки', sector: 'carbs', emoji: '🥣', cals: 389, p: 16.9, f: 6.9, c: 66 },
-            { name: 'Запеченный батат', sector: 'carbs', emoji: '🍠', cals: 86, p: 1.6, f: 0.1, c: 20 },
-            // Полезные жиры
-            { name: 'Спелое Авокадо', sector: 'fats', emoji: '🥑', cals: 160, p: 2.0, f: 14.7, c: 8.5 },
-            { name: 'Оливковое масло холодного отжима', sector: 'fats', emoji: '🏺', cals: 120, p: 0, f: 14, c: 0 },
-            { name: 'Орехи миндаль', sector: 'fats', emoji: '🥜', cals: 160, p: 6, f: 14, c: 6 }
-        ];
-
-        let profile = {...defaultProfile};
-        let todayCalories = 0;
-        let todayWater = 0;
-        let todaySteps = 0;
-        let activeTab = 'home';
-        let currentNewMealType = 'Перекус';
-        
-        let meals = [];
-        let fridgeIngredients = []; // Массив продуктов в холодильнике
-
-        // Данные текущей собираемой интерактивной тарелки
-        let currentPlate = {
-            fiber: 0,     // граммы клетчатки
-            protein: 0,   // граммы белков
-            carbs: 0,     // граммы углеводов
-            fats: 0,      // граммы жиров
-            calories: 0,
-            items: []     // список названий добавленных продуктов
-        };
-
-        // Показать всплывающее уведомление (Toast)
-        function showNotification(text, type = 'success') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
+        // Инициализируем логику только после полной загрузки DOM-дерева
+        document.addEventListener('DOMContentLoaded', () => {
             
-            const bgClass = type === 'success' ? 'bg-emerald-500' : 'bg-blue-500';
-            const icon = type === 'success' ? 'fa-circle-check' : 'fa-info-circle';
-            
-            toast.className = `animate-toast flex items-center gap-2.5 px-4 py-3 ${bgClass} text-white text-xs font-bold rounded-xl shadow-lg pointer-events-auto`;
-            toast.innerHTML = `
-                <i class="fa-solid ${icon}"></i>
-                <span>${text}</span>
-            `;
-            
-            container.appendChild(toast);
-            
-            // Удалить через 3 секунды
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.transform = 'translateY(-20px)';
-                toast.style.transition = 'all 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
+            // Стартовая база продуктов для конструктора (Гарвардский метод)
+            let constructorFoods = [
+                // Клетчатка (Зеленые)
+                { name: 'Брокколи', sector: 'fiber', emoji: '🥦', cals: 25, p: 1.2, f: 0.2, c: 2.5 },
+                { name: 'Томаты Черри', sector: 'fiber', emoji: '🍅', cals: 18, p: 0.6, f: 0.1, c: 3.8 },
+                { name: 'Шпинат свежий', sector: 'fiber', emoji: '🥬', cals: 23, p: 2.9, f: 0.3, c: 3.6 },
+                { name: 'Огурец хрустящий', sector: 'fiber', emoji: '🥒', cals: 15, p: 0.8, f: 0.1, c: 2.8 },
+                { name: 'Свежая морковь', sector: 'fiber', emoji: '🥕', cals: 41, p: 0.9, f: 0.2, c: 9.6 },
+                { name: 'Болгарский перец', sector: 'fiber', emoji: '🫑', cals: 20, p: 0.9, f: 0.2, c: 4.6 },
+                { name: 'Зеленое яблоко', sector: 'fiber', emoji: '🍎', cals: 52, p: 0.3, f: 0.2, c: 14 },
+                { name: 'Свежая голубика', sector: 'fiber', emoji: '🫐', cals: 57, p: 0.7, f: 0.3, c: 14 },
+                // Белки (Оранжевые)
+                { name: 'Куриное филе', sector: 'protein', emoji: '🍗', cals: 113, p: 23.6, f: 1.9, c: 0 },
+                { name: 'Яйцо вареное', sector: 'protein', emoji: '🥚', cals: 74, p: 6.3, f: 5.3, c: 0.4 },
+                { name: 'Лосось на гриле', sector: 'protein', emoji: '🐟', cals: 142, p: 19.8, f: 6.3, c: 0 },
+                { name: 'Органический Тофу', sector: 'protein', emoji: '🧈', cals: 76, p: 8.1, f: 4.8, c: 1.9 },
+                { name: 'Постная говядина', sector: 'protein', emoji: '🥩', cals: 150, p: 26, f: 6, c: 0 },
+                { name: 'Креветки на пару', sector: 'protein', emoji: '🍤', cals: 99, p: 24, f: 0.3, c: 0.2 },
+                { name: 'Творог органический 5%', sector: 'protein', emoji: '🥛', cals: 121, p: 17, f: 5, c: 3 },
+                // Сложные углеводы (Желтые)
+                { name: 'Отварная Киноа', sector: 'carbs', emoji: '🍚', cals: 120, p: 4.4, f: 1.9, c: 21.3 },
+                { name: 'Бурый цельный рис', sector: 'carbs', emoji: '🌾', cals: 111, p: 2.6, f: 0.9, c: 23.1 },
+                { name: 'Зеленая гречка', sector: 'carbs', emoji: '🤎', cals: 132, p: 4.5, f: 2.3, c: 25.0 },
+                { name: 'Овсянка долгой варки', sector: 'carbs', emoji: '🥣', cals: 389, p: 16.9, f: 6.9, c: 66 },
+                { name: 'Запеченный батат', sector: 'carbs', emoji: '🍠', cals: 86, p: 1.6, f: 0.1, c: 20 },
+                // Полезные жиры
+                { name: 'Спелое Авокадо', sector: 'fats', emoji: '🥑', cals: 160, p: 2.0, f: 14.7, c: 8.5 },
+                { name: 'Оливковое масло', sector: 'fats', emoji: '🏺', cals: 120, p: 0, f: 14, c: 0 },
+                { name: 'Орехи миндаль', sector: 'fats', emoji: '🥜', cals: 160, p: 6, f: 14, c: 6 }
+            ];
 
-        // Загрузка данных из LocalStorage
-        function loadFromStorage() {
-            const savedProfile = localStorage.getItem('nutri_profile');
-            const savedMeals = localStorage.getItem('nutri_meals');
-            const savedWater = localStorage.getItem('nutri_water');
-            const savedSteps = localStorage.getItem('nutri_steps');
-            const savedIngredients = localStorage.getItem('nutri_fridge');
-            const savedCustomPlateFoods = localStorage.getItem('nutri_custom_plate_foods');
+            let profile = {...defaultProfile};
+            let todayCalories = 0;
+            let todayWater = 0;
+            let todaySteps = 0;
+            let activeTab = 'home';
+            let currentNewMealType = 'Перекус';
+            
+            let meals = [];
+            let fridgeIngredients = []; // Массив продуктов в холодильнике
 
-            if (savedProfile) profile = JSON.parse(savedProfile);
-            if (savedMeals) {
-                meals = JSON.parse(savedMeals);
-                todayCalories = meals.reduce((sum, item) => sum + item.calories, 0);
-            } else {
-                meals = [
-                    { id: 1, type: 'Завтрак', name: 'Омлет с помидорами и зеленью', calories: 280 },
-                    { id: 2, type: 'Обед', name: 'Куриное филе на гриле с гречкой', calories: 490 }
-                ];
-                todayCalories = 770;
-            }
-            if (savedWater) todayWater = parseInt(savedWater);
-            if (savedSteps) todaySteps = parseInt(savedSteps);
-            if (savedIngredients) {
-                fridgeIngredients = JSON.parse(savedIngredients);
-            } else {
-                fridgeIngredients = ['Яйца', 'Курица', 'Томаты']; 
-            }
+            // Данные текущей собираемой интерактивной тарелки
+            let currentPlate = {
+                fiber: 0,     // граммы клетчатки
+                protein: 0,   // граммы белков
+                carbs: 0,     // граммы углеводов
+                fats: 0,      // граммы жиров
+                calories: 0,
+                items: []     // список названий добавленных продуктов
+            };
 
-            // Загружаем сохраненные кастомные продукты в конструктор
-            if (savedCustomPlateFoods) {
-                const customPlateFoods = JSON.parse(savedCustomPlateFoods);
-                // Соединяем базовый список с пользовательским, отсекая возможные дубликаты
-                customPlateFoods.forEach(cf => {
-                    if (!constructorFoods.some(f => f.name === cf.name)) {
-                        constructorFoods.push(cf);
+            // Селекторы элементов интерфейса
+            const tabHome = document.getElementById('tab-home');
+            const tabTracker = document.getElementById('tab-tracker');
+            const tabFridge = document.getElementById('tab-fridge');
+            const tabAi = document.getElementById('tab-ai');
+            const tabProfile = document.getElementById('tab-profile');
+            const plateModal = document.getElementById('plate-modal');
+            const confirmModal = document.getElementById('confirm-modal');
+            
+            const caloriesCurrent = document.getElementById('calories-current');
+            const caloriesGoalDisplay = document.getElementById('calories-goal-display');
+            const caloriesProgressBar = document.getElementById('calories-progress-bar');
+            
+            const waterCurrent = document.getElementById('water-current');
+            const waterGoalDisplay = document.getElementById('water-goal-display');
+            const waterProgressBar = document.getElementById('water-progress-bar');
+            
+            const stepsCurrent = document.getElementById('steps-current');
+            const stepsProgressBar = document.getElementById('steps-progress-bar');
+            
+            const activityBurned = document.getElementById('activity-burned');
+            const userDisplayName = document.getElementById('user-display-name');
+            const goalBadge = document.getElementById('goal-badge');
+
+            // Инициализация обработчиков тач-кликов
+            function attachClick(element, callback) {
+                if (!element) return;
+                // Препятствуем двойному срабатыванию на современных тач-экранах
+                let tapped = false;
+                element.addEventListener('touchstart', (e) => {
+                    tapped = true;
+                    callback(e);
+                }, { passive: true });
+                element.addEventListener('click', (e) => {
+                    if (!tapped) {
+                        callback(e);
                     }
+                    tapped = false;
                 });
             }
 
-            // Заполнение полей в интерфейсе профиля
-            document.getElementById('user-name').value = profile.name;
-            document.getElementById('user-gender').value = profile.gender;
-            document.getElementById('user-age').value = profile.age;
-            document.getElementById('user-height').value = profile.height;
-            document.getElementById('user-weight').value = profile.weight;
-            document.getElementById('user-activity').value = profile.activity;
-            
-            setGoal(profile.goal, false); 
-            updateProfile(false); 
-            renderIngredients();
-        }
-
-        // Сохранение в LocalStorage
-        function saveToStorage() {
-            localStorage.setItem('nutri_profile', JSON.stringify(profile));
-            localStorage.setItem('nutri_meals', JSON.stringify(meals));
-            localStorage.setItem('nutri_water', todayWater.toString());
-            localStorage.setItem('nutri_steps', todaySteps.toString());
-            localStorage.setItem('nutri_fridge', JSON.stringify(fridgeIngredients));
-        }
-
-        // Переключение Вкладок
-        function switchTab(tabId) {
-            activeTab = tabId;
-            const tabs = ['home', 'tracker', 'fridge', 'ai', 'profile'];
-            tabs.forEach(t => {
-                document.getElementById(`tab-${t}`).classList.add('hidden');
-                const nav = document.getElementById(`nav-${t}`);
-                nav.classList.replace('text-emerald-400', 'text-slate-400');
-            });
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById(`nav-${tabId}`).classList.replace('text-slate-400', 'text-emerald-400');
-        }
-
-        // Расчёт нормы калорий и воды
-        function updateProfile(shouldSave = true) {
-            profile.name = document.getElementById('user-name').value || 'Екатерина';
-            profile.gender = document.getElementById('user-gender').value;
-            profile.age = parseFloat(document.getElementById('user-age').value) || 25;
-            profile.height = parseFloat(document.getElementById('user-height').value) || 165;
-            profile.weight = parseFloat(document.getElementById('user-weight').value) || 55;
-            profile.activity = parseFloat(document.getElementById('user-activity').value) || 1.375;
-
-            let bmr = (profile.gender === 'male')
-                ? (10 * profile.weight + 6.25 * profile.height - 5 * profile.age + 5)
-                : (10 * profile.weight + 6.25 * profile.height - 5 * profile.age - 161);
-
-            let cals = bmr * profile.activity;
-            if (profile.goal === 'lose') cals -= 350;
-            if (profile.goal === 'gain') cals += 350;
-
-            profile.calorieGoal = Math.round(cals);
-            profile.waterGoal = Math.round(profile.weight * 30 + (profile.activity > 1.4 ? 350 : 0));
-
-            // Обновление UI элементов
-            document.getElementById('user-display-name').innerText = profile.name;
-            document.getElementById('calories-goal-display').innerText = profile.calorieGoal;
-            document.getElementById('tracker-calories-goal').innerText = profile.calorieGoal;
-            document.getElementById('water-goal-display').innerText = profile.waterGoal;
-            document.getElementById('profile-cal-norm').innerText = profile.calorieGoal;
-            document.getElementById('profile-water-norm').innerText = profile.waterGoal;
-            document.getElementById('ai-constructor-cal').innerText = profile.calorieGoal;
-
-            recalculateProgress();
-            if(shouldSave) saveToStorage();
-        }
-
-        // Сборка цели
-        function setGoal(goalId, shouldSave = true) {
-            profile.goal = goalId;
-            ['lose', 'keep', 'gain'].forEach(g => {
-                document.getElementById(`btn-goal-${g}`).className = (g === goalId)
-                    ? "goal-btn py-1.5 rounded-xl text-[9px] font-black border bg-emerald-500 text-white border-emerald-500"
-                    : "goal-btn py-1.5 rounded-xl text-[9px] font-black border bg-slate-900 text-slate-400 border-slate-800";
-            });
-
-            const badge = document.getElementById('goal-badge');
-            if (goalId === 'lose') badge.innerText = '📉 Похудение';
-            if (goalId === 'keep') badge.innerText = '⚖️ Баланс';
-            if (goalId === 'gain') badge.innerText = '📈 Набор';
-
-            updateProfile(shouldSave);
-        }
-
-        // Пересчет Прогресс-баров
-        function recalculateProgress() {
-            // Калории
-            const calPct = Math.min(100, Math.round((todayCalories / profile.calorieGoal) * 100)) || 0;
-            document.getElementById('calories-current').innerText = todayCalories;
-            document.getElementById('tracker-calories-sum').innerText = todayCalories;
-            document.getElementById('calories-progress-bar').style.width = calPct + '%';
-
-            // Вода
-            const waterPct = Math.min(100, Math.round((todayWater / profile.waterGoal) * 100)) || 0;
-            document.getElementById('water-current').innerText = todayWater;
-            document.getElementById('water-progress-bar').style.width = waterPct + '%';
-
-            // Шаги
-            const stepsPct = Math.min(100, Math.round((todaySteps / 10000) * 100)) || 0;
-            document.getElementById('steps-current').innerText = todaySteps;
-            document.getElementById('steps-progress-bar').style.width = stepsPct + '%';
-
-            // Сожжено калорий
-            document.getElementById('activity-burned').innerText = Math.round(todaySteps * 0.045);
-        }
-
-        // Кнопки быстрой активности
-        function addWater() {
-            todayWater = Math.min(4000, todayWater + 250);
-            recalculateProgress();
-            saveToStorage();
-            showNotification('Выпито +250 мл чистой воды 💧', 'blue');
-        }
-
-        // Добавление шагов
-        function addSteps() {
-            todaySteps = Math.min(30000, todaySteps + 2000);
-            recalculateProgress();
-            saveToStorage();
-            showNotification('Добавлено +2000 шагов 🏃‍♂️', 'success');
-        }
-
-        // Рендеринг списка ингредиентов в виде тегов
-        function renderIngredients() {
-            const container = document.getElementById('ingredients-container');
-            const badge = document.getElementById('fridge-badge');
-            
-            if (fridgeIngredients.length === 0) {
-                container.innerHTML = `<span class="text-[9px] text-slate-500 italic m-auto">Холодильник пуст...</span>`;
-                badge.classList.add('hidden');
-                return;
-            }
-
-            badge.classList.remove('hidden');
-            container.innerHTML = '';
-            fridgeIngredients.forEach((ing, index) => {
-                container.innerHTML += `
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-800 text-slate-200 rounded-xl text-[10px] font-bold border border-slate-700">
-                        ${ing}
-                        <button onclick="removeIngredient(${index})" class="text-slate-400 hover:text-red-400 text-[10px] focus:outline-none">
-                            <i class="fa-solid fa-circle-xmark"></i>
-                        </button>
-                    </span>
-                `;
-            });
-        }
-
-        // Добавление пользовательского ингредиента
-        function addCustomIngredient() {
-            const input = document.getElementById('ingredient-input');
-            const val = input.value.trim();
-            if (!val) return;
-
-            // Избегаем дублирования
-            if (!fridgeIngredients.includes(val)) {
-                fridgeIngredients.push(val);
-                saveToStorage();
-                renderIngredients();
-                showNotification(`Продукт "${val}" добавлен в холодильник 🥦`);
-            }
-            input.value = '';
-        }
-
-        // Быстрое переключение из заготовок
-        function toggleFastIngredient(ingName) {
-            const idx = fridgeIngredients.indexOf(ingName);
-            if (idx === -1) {
-                fridgeIngredients.push(ingName);
-                showNotification(`Добавлено: ${ingName} 🥗`);
-            } else {
-                fridgeIngredients.splice(idx, 1);
-                showNotification(`Убрано: ${ingName} ❌`, 'blue');
-            }
-            saveToStorage();
-            renderIngredients();
-        }
-
-        // Удаление тега
-        function removeIngredient(index) {
-            const removed = fridgeIngredients[index];
-            fridgeIngredients.splice(index, 1);
-            saveToStorage();
-            renderIngredients();
-            showNotification(`Удалено из холодильника: ${removed} 🗑️`, 'blue');
-        }
-
-        // Динамический генератор рецептов на основе реального содержимого холодильника
-        function findFridgeRecipes() {
-            if (fridgeIngredients.length === 0) {
-                alert('Сначала добавьте хотя бы один продукт в холодильник!');
-                return;
-            }
-
-            const output = document.getElementById('fridge-recipes-output');
-            output.innerHTML = `
-                <div class="p-6 text-center text-xs text-slate-400 space-y-2 animate-pulse">
-                    <i class="fa-solid fa-kitchen-set text-2xl text-emerald-400 animate-bounce"></i>
-                    <p class="font-bold">ИИ составляет рецепты...</p>
-                    <p class="text-[9px]">Анализируем продукты в вашем холодильнике</p>
-                </div>
-            `;
-            output.classList.remove('hidden');
-
-            // Симулируем интеллектуальный подбор строго по выбранным ингредиентам
-            setTimeout(() => {
-                output.innerHTML = '';
+            // Рендеринг уведомлений
+            function showNotification(text, type = 'success') {
+                const container = document.getElementById('toast-container');
+                if (!container) return;
+                const toast = document.createElement('div');
                 
-                // Переводим теги в нижний регистр для точного сравнения
-                const lowerIngredients = fridgeIngredients.map(i => i.toLowerCase());
+                const bgClass = type === 'success' ? 'bg-emerald-500' : 'bg-blue-500';
+                const icon = type === 'success' ? 'fa-circle-check' : 'fa-info-circle';
+                
+                toast.className = `animate-toast flex items-center gap-2.5 px-4 py-3 ${bgClass} text-white text-xs font-bold rounded-xl shadow-lg pointer-events-auto`;
+                toast.innerHTML = `
+                    <i class="fa-solid ${icon}"></i>
+                    <span>${text}</span>
+                `;
+                
+                container.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(-20px)';
+                    toast.style.transition = 'all 0.3s ease';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
 
-                // База возможных умных рецептов
-                const recipeDatabase = [
-                    {
-                        title: "🍳 Пышный омлет «Нутри-Макс»",
-                        required: ["яйца"],
-                        optional: ["молоко", "томаты", "сыр", "лук"],
-                        time: "8 мин",
-                        level: "Легко",
-                        baseCals: 150,
-                        getDesc: (has) => `Нежнейший белковый омлет, приготовленный из ваших продуктов: ${has.join(', ')}.`,
-                        getSteps: (has) => `1. Взбейте яйца ${has.includes('молоко') ? 'с молоком' : 'с каплей воды'}. ${has.includes('лук') || has.includes('томаты') ? '2. Припустите нарезанные лук и томаты на сковороде 2 минуты.' : ''} 3. Вылейте яичную смесь на скороводу. ${has.includes('сыр') ? 'Посыпьте тертым сыром перед подачей.' : 'Готовьте под крышкой 5 минут.'}`
-                    },
-                    {
-                        title: "🍚 Домашний плов с нежной курочкой",
-                        required: ["курица", "рис"],
-                        optional: ["лук", "томаты"],
-                        time: "25 мин",
-                        level: "Средне",
-                        baseCals: 380,
-                        getDesc: (has) => `Сытное и богатое сложными углеводами блюдо из риса и курицы с добавлением ${has.filter(i => i !== 'курица' && i !== 'рис').join(', ')}.`,
-                        getSteps: (has) => `1. Нарежьте куриное филе кусочками и обжарьте ${has.includes('лук') ? 'с луком' : ''} до золотистой корочки. 2. Добавьте промытый рис, залейте водой в пропорции 1:2. ${has.includes('томаты') ? 'Положите кубики томатов для сочности.' : ''} 3. Тушите под закрытой крышкой на медленном огне до полного впитывания воды (15-20 минут).`
-                    },
-                    {
-                        title: "🥗 Итальянский теплый салат",
-                        required: ["томаты"],
-                        optional: ["огурец", "сыр", "лук", "курица"],
-                        time: "10 мин",
-                        level: "Легко",
-                        baseCals: 120,
-                        getDesc: (has) => `Свежий, хрустящий салат на основе томатов. Вы добавили в него: ${has.join(', ')}.`,
-                        getSteps: (has) => `1. Нарежьте томаты кубиками ${has.includes('огурец') ? 'и добавьте свежий огурец' : ''}. ${has.includes('курица') ? '2. Добавьте слайсы теплой обжаренной грудки.' : ''} 3. Смешайте ингредиенты, посыпьте ${has.includes('сыр') ? 'тертым сыром' : 'зеленью'} и заправьте чайной ложкой оливкового масла.`
-                    },
-                    {
-                        title: "🍲 Быстрый рисовый суп-пюре",
-                        required: ["рис", "курица"],
-                        optional: ["лук", "молоко"],
-                        time: "20 мин",
-                        level: "Легко",
-                        baseCals: 290,
-                        getDesc: (has) => `Легкий диетический суп из ваших запасов: ${has.join(', ')}.`,
-                        getSteps: (has) => `1. Отварите рис и куриное филе в небольшом количестве воды. ${has.includes('лук') ? '2. Добавьте пассерованный лук.' : ''} 3. Измельчите всё блендером до состояния пюре ${has.includes('молоко') ? ', влив немного молока для сливочного вкуса.' : '.'}`
-                    },
-                    {
-                        title: "🥞 Нежные молочные блины",
-                        required: ["молоко", "яйца"],
-                        optional: [],
-                        time: "15 мин",
-                        level: "Средне",
-                        baseCals: 210,
-                        getDesc: (has) => `Классический рецепт домашних блинчиков на молоке и яйцах.`,
-                        getSteps: (has) => `1. Взбейте яйца с молоком и щепоткой соли (при наличии добавьте 2 ложки муки). 2. Выпекайте на хорошо разогретой сковороде по 1 минуте с каждой стороны.`
+            // Переключение вкладок
+            function switchTab(tabId) {
+                activeTab = tabId;
+                const tabs = {
+                    home: tabHome,
+                    tracker: tabTracker,
+                    fridge: tabFridge,
+                    ai: tabAi,
+                    profile: tabProfile
+                };
+
+                Object.keys(tabs).forEach(t => {
+                    if (tabs[t]) {
+                        tabs[t].classList.add('hidden');
                     }
-                ];
-
-                let matchedRecipes = [];
-
-                // Проверяем каждый рецепт на наличие обязательных ингредиентов в холодильнике
-                recipeDatabase.forEach(recipe => {
-                    const hasAllRequired = recipe.required.every(req => lowerIngredients.includes(req));
-                    
-                    if (hasAllRequired) {
-                        // Собираем все ингредиенты, которые у нас совпали для этого рецепта
-                        const matchedOptional = recipe.optional.filter(opt => lowerIngredients.includes(opt));
-                        const allUsed = [...recipe.required, ...matchedOptional];
-
-                        // Рассчитываем калорийность с учетом дополнительных ингредиентов
-                        let finalCals = recipe.baseCals + (matchedOptional.length * 40);
-
-                        matchedRecipes.push({
-                            title: recipe.title,
-                            time: recipe.time,
-                            level: recipe.level,
-                            calories: finalCals,
-                            desc: recipe.getDesc(allUsed),
-                            steps: recipe.getSteps(allUsed)
-                        });
+                    const nav = document.getElementById(`nav-btn-${t}`);
+                    if (nav) {
+                        nav.classList.remove('text-emerald-400');
+                        nav.classList.add('text-slate-400');
                     }
                 });
 
-                // Если ничего не подошло под строгие правила, собираем один универсальный микс-рецепт
-                if (matchedRecipes.length === 0) {
-                    const itemsText = fridgeIngredients.join(', ');
-                    matchedRecipes.push({
-                        title: "🥗 Полезный ИИ-Микс «Сытый день»",
-                        time: "12 мин",
-                        level: "Легко",
-                        calories: 220,
-                        desc: `Эксклюзивное экспресс-блюдо из всех ваших продуктов: ${itemsText}.`,
-                        steps: `1. Подготовьте и измельчите ваши ингредиенты: ${itemsText}. 2. Прогрейте или смешайте их в глубокой посуде. 3. Заправьте любимыми специями и ложкой масла. Сбалансированный состав готов!`
+                if (tabs[tabId]) {
+                    tabs[tabId].classList.remove('hidden');
+                }
+                const activeNav = document.getElementById(`nav-btn-${tabId}`);
+                if (activeNav) {
+                    activeNav.classList.remove('text-slate-400');
+                    activeNav.classList.add('text-emerald-400');
+                }
+            }
+
+            // Настройка меню таб-бара
+            ['home', 'tracker', 'fridge', 'ai', 'profile'].forEach(tabName => {
+                const btn = document.getElementById(`nav-btn-${tabName}`);
+                attachClick(btn, () => switchTab(tabName));
+            });
+
+            // Навигация из баннеров
+            const fridgeBanner = document.getElementById('fridge-banner');
+            attachClick(fridgeBanner, () => switchTab('fridge'));
+
+            // Логика загрузки и сохранения данных
+            function loadFromStorage() {
+                const savedProfile = localStorage.getItem('nutri_profile');
+                const savedMeals = localStorage.getItem('nutri_meals');
+                const savedWater = localStorage.getItem('nutri_water');
+                const savedSteps = localStorage.getItem('nutri_steps');
+                const savedIngredients = localStorage.getItem('nutri_fridge');
+                const savedCustomPlateFoods = localStorage.getItem('nutri_custom_plate_foods');
+
+                if (savedProfile) profile = JSON.parse(savedProfile);
+                if (savedMeals) {
+                    meals = JSON.parse(savedMeals);
+                    todayCalories = meals.reduce((sum, item) => sum + item.calories, 0);
+                } else {
+                    meals = [
+                        { id: 1, type: 'Завтрак', name: 'Омлет с помидорами и зеленью', calories: 280 },
+                        { id: 2, type: 'Обед', name: 'Куриное филе на гриле с гречкой', calories: 490 }
+                    ];
+                    todayCalories = 770;
+                }
+                if (savedWater) todayWater = parseInt(savedWater);
+                if (savedSteps) todaySteps = parseInt(savedSteps);
+                if (savedIngredients) {
+                    fridgeIngredients = JSON.parse(savedIngredients);
+                } else {
+                    fridgeIngredients = ['Яйца', 'Курица', 'Томаты']; 
+                }
+
+                if (savedCustomPlateFoods) {
+                    const customPlateFoods = JSON.parse(savedCustomPlateFoods);
+                    customPlateFoods.forEach(cf => {
+                        if (!constructorFoods.some(f => f.name === cf.name)) {
+                            constructorFoods.push(cf);
+                        }
                     });
                 }
 
-                // Выводим рецепты на экран
-                matchedRecipes.forEach(rec => {
-                    output.innerHTML += `
-                        <div class="bg-slate-800/80 border border-slate-700 p-4 rounded-2xl space-y-2.5 animate-slideDown">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <span class="text-[8px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold uppercase">${rec.level} | ${rec.time}</span>
-                                    <h4 class="text-xs font-extrabold text-white mt-1.5">${rec.title}</h4>
-                                </div>
-                                <span class="text-[11px] font-black text-emerald-400">${rec.calories} ккал</span>
-                            </div>
-                            <p class="text-[10px] text-slate-300 italic">${rec.desc}</p>
-                            <div class="p-2 bg-slate-900/40 rounded-xl border border-slate-800 text-[9px] text-slate-400 leading-relaxed">
-                                <span class="font-bold text-slate-200 block mb-1">Рецепт:</span>
-                                ${rec.steps}
-                            </div>
-                            <button onclick="cookRecipe('${rec.title}', ${rec.calories})" class="active-scale w-full bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-utensils"></i> Я приготовил это! (+${rec.cals} ккал)
-                            </button>
-                        </div>
-                    `;
+                // Синхронизация полей ввода в Профиле
+                document.getElementById('user-name').value = profile.name;
+                document.getElementById('user-gender').value = profile.gender;
+                document.getElementById('user-age').value = profile.age;
+                document.getElementById('user-height').value = profile.height;
+                document.getElementById('user-weight').value = profile.weight;
+                document.getElementById('user-activity').value = profile.activity;
+                
+                setGoal(profile.goal, false); 
+                updateProfile(false); 
+                renderIngredients();
+            }
+
+            function saveToStorage() {
+                localStorage.setItem('nutri_profile', JSON.stringify(profile));
+                localStorage.setItem('nutri_meals', JSON.stringify(meals));
+                localStorage.setItem('nutri_water', todayWater.toString());
+                localStorage.setItem('nutri_steps', todaySteps.toString());
+                localStorage.setItem('nutri_fridge', JSON.stringify(fridgeIngredients));
+            }
+
+            // Расчет БЖУ и норм калорий
+            function updateProfile(shouldSave = true) {
+                profile.name = document.getElementById('user-name').value || 'Екатерина';
+                profile.gender = document.getElementById('user-gender').value;
+                profile.age = parseFloat(document.getElementById('user-age').value) || 25;
+                profile.height = parseFloat(document.getElementById('user-height').value) || 165;
+                profile.weight = parseFloat(document.getElementById('user-weight').value) || 55;
+                profile.activity = parseFloat(document.getElementById('user-activity').value) || 1.375;
+
+                let bmr = (profile.gender === 'male')
+                    ? (10 * profile.weight + 6.25 * profile.height - 5 * profile.age + 5)
+                    : (10 * profile.weight + 6.25 * profile.height - 5 * profile.age - 161);
+
+                let cals = bmr * profile.activity;
+                if (profile.goal === 'lose') cals -= 350;
+                if (profile.goal === 'gain') cals += 350;
+
+                profile.calorieGoal = Math.round(cals);
+                profile.waterGoal = Math.round(profile.weight * 30 + (profile.activity > 1.4 ? 350 : 0));
+
+                // Применяем в UI
+                if (userDisplayName) userDisplayName.innerText = profile.name;
+                if (caloriesGoalDisplay) caloriesGoalDisplay.innerText = profile.calorieGoal;
+                
+                const trCalGoal = document.getElementById('tracker-calories-goal');
+                if (trCalGoal) trCalGoal.innerText = profile.calorieGoal;
+                
+                if (waterGoalDisplay) waterGoalDisplay.innerText = profile.waterGoal;
+                
+                const prCalNorm = document.getElementById('profile-cal-norm');
+                if (prCalNorm) prCalNorm.innerText = profile.calorieGoal;
+                
+                const prWatNorm = document.getElementById('profile-water-norm');
+                if (prWatNorm) prWatNorm.innerText = profile.waterGoal;
+                
+                const aiConstCal = document.getElementById('ai-constructor-cal');
+                if (aiConstCal) aiConstCal.innerText = profile.calorieGoal;
+
+                recalculateProgress();
+                if (shouldSave) saveToStorage();
+            }
+
+            function setGoal(goalId, shouldSave = true) {
+                profile.goal = goalId;
+                ['lose', 'keep', 'gain'].forEach(g => {
+                    const btn = document.getElementById(`btn-goal-${g}`);
+                    if (btn) {
+                        btn.className = (g === goalId)
+                            ? "active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black border bg-emerald-500 text-white border-emerald-500"
+                            : "active-scale goal-btn py-1.5 rounded-xl text-[9px] font-black border bg-slate-900 text-slate-400 border-slate-800";
+                    }
                 });
 
-                showNotification('Рецепты успешно составлены ИИ! 🪄');
-            }, 1200);
-        }
-
-        // Действие "Приготовил" — занесение в дневник питания
-        function cookRecipe(title, calories) {
-            meals.push({
-                id: Date.now(),
-                type: 'Обед',
-                name: `ИИ-Холодильник: ${title}`,
-                calories: calories
-            });
-            todayCalories += calories;
-            
-            saveToStorage();
-            renderMeals();
-            recalculateProgress();
-            
-            showNotification(`Приготовлено: ${title}! 🍳`);
-            switchTab('tracker');
-        }
-
-        // Управление дневником питания
-        function toggleAddMealForm() {
-            document.getElementById('add-meal-form').classList.toggle('hidden');
-        }
-
-        // Установка типа еды
-        function setNewMealType(type) {
-            currentNewMealType = type;
-            ['breakfast', 'lunch', 'dinner', 'snack'].forEach(t => {
-                const ru = { breakfast:'Завтрак', lunch:'Обед', dinner:'Ужин', snack:'Перекус' };
-                document.getElementById(`btn-type-${t}`).className = (ru[t] === type)
-                    ? "type-btn py-1 rounded bg-emerald-500 text-white text-[9px] font-bold"
-                    : "type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold";
-            });
-        }
-
-        // Сохранение блюда
-        function saveMeal() {
-            const name = document.getElementById('new-meal-name').value.trim();
-            const cals = parseInt(document.getElementById('new-meal-calories').value);
-
-            if (!name || isNaN(cals)) return alert('Заполните данные!');
-
-            meals.push({ id: Date.now(), type: currentNewMealType, name, calories: cals });
-            todayCalories += cals;
-
-            document.getElementById('new-meal-name').value = '';
-            document.getElementById('new-meal-calories').value = '';
-            toggleAddMealForm();
-            
-            renderMeals();
-            recalculateProgress();
-            saveToStorage();
-            showNotification(`Добавлено блюдо: ${name} 🍽️`);
-        }
-
-        // Удаление приема пищи
-        function deleteMeal(id, cals) {
-            const item = meals.find(m => m.id === id);
-            meals = meals.filter(m => m.id !== id);
-            todayCalories = Math.max(0, todayCalories - cals);
-            renderMeals();
-            recalculateProgress();
-            saveToStorage();
-            if (item) showNotification(`Удалено: ${item.name} 🗑️`, 'blue');
-        }
-
-        // Отрисовка списка блюд
-        function renderMeals() {
-            const list = document.getElementById('meals-list');
-            list.innerHTML = '';
-            document.getElementById('meals-count').innerText = meals.length;
-
-            meals.forEach(meal => {
-                let cl = (meal.type === 'Завтрак') ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                         (meal.type === 'Обед') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                         (meal.type === 'Ужин') ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
-                                                  'bg-purple-500/10 text-purple-400 border-purple-500/20';
-
-                list.innerHTML += `
-                    <div class="bg-slate-800/30 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
-                      <div class="flex items-center gap-2">
-                        <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase border ${cl}">${meal.type}</span>
-                        <div>
-                          <span class="block text-xs font-bold text-white">${meal.name}</span>
-                          <span class="block text-[9px] text-slate-400">${meal.calories} ккал</span>
-                        </div>
-                      </div>
-                      <button onclick="deleteMeal(${meal.id}, ${meal.calories})" class="text-slate-500 hover:text-red-400 px-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
-                    </div>
-                `;
-            });
-        }
-
-        // ЛОГИКА СМАРТ-КОНСТРУКТОРА ТАРЕЛКИ
-        function openPlateConstructor() {
-            document.getElementById('plate-modal').classList.remove('hidden');
-            renderPlateIngredients(); // Рендерим актуальный список
-        }
-
-        function closePlateConstructor() {
-            document.getElementById('plate-modal').classList.add('hidden');
-        }
-
-        // Динамический умный рендеринг списка ингредиентов с учетом фильтра поиска (Новое!)
-        function renderPlateIngredients() {
-            const searchQuery = document.getElementById('plate-search').value.toLowerCase().trim();
-            
-            // Получаем контейнеры категорий БЖУ
-            const fiberList = document.getElementById('container-fiber-list');
-            const proteinList = document.getElementById('container-protein-list');
-            const carbsList = document.getElementById('container-carbs-list');
-            const fatsList = document.getElementById('container-fats-list');
-
-            // Очищаем списки перед сборкой
-            fiberList.innerHTML = '';
-            proteinList.innerHTML = '';
-            carbsList.innerHTML = '';
-            fatsList.innerHTML = '';
-
-            let matchedCounts = { fiber: 0, protein: 0, carbs: 0, fats: 0 };
-
-            constructorFoods.forEach(food => {
-                // Если задан поисковый запрос, фильтруем по имени
-                if (searchQuery && !food.name.toLowerCase().includes(searchQuery)) {
-                    return; 
+                if (goalBadge) {
+                    if (goalId === 'lose') goalBadge.innerText = '📉 Похудение';
+                    if (goalId === 'keep') goalBadge.innerText = '⚖️ Баланс';
+                    if (goalId === 'gain') goalBadge.innerText = '📈 Набор';
                 }
 
-                matchedCounts[food.sector]++;
+                updateProfile(shouldSave);
+            }
 
-                const buttonHTML = `
-                    <button onclick="addIngredientToPlate('${food.name}', '${food.sector}', '${food.emoji}', ${food.cals}, ${food.p}, ${food.f}, ${food.c})" class="active-scale text-left p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-1.5 w-full transition-all">
-                        <span class="text-base">${food.emoji}</span>
-                        <span class="truncate flex-1">${food.name}</span>
-                        <span class="text-[8px] opacity-75 ${food.sector === 'fiber' ? 'text-emerald-400' : food.sector === 'protein' ? 'text-orange-400' : food.sector === 'carbs' ? 'text-amber-400' : 'text-yellow-500'}">+100г</span>
-                    </button>
-                `;
-
-                if (food.sector === 'fiber') fiberList.innerHTML += buttonHTML;
-                else if (food.sector === 'protein') proteinList.innerHTML += buttonHTML;
-                else if (food.sector === 'carbs') carbsList.innerHTML += buttonHTML;
-                else if (food.sector === 'fats') fatsList.innerHTML += buttonHTML;
+            // Навешивание событий на поля ввода в Профиле
+            ['user-name', 'user-gender', 'user-age', 'user-height', 'user-weight', 'user-activity'].forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', () => updateProfile(true));
+                    input.addEventListener('change', () => updateProfile(true));
+                }
             });
 
-            // Автоматически скрываем или показываем разделы, в которых есть/нет совпадений
-            document.getElementById('cat-fiber-container').style.display = matchedCounts.fiber > 0 ? 'block' : 'none';
-            document.getElementById('cat-protein-container').style.display = matchedCounts.protein > 0 ? 'block' : 'none';
-            document.getElementById('cat-carbs-container').style.display = matchedCounts.carbs > 0 ? 'block' : 'none';
-            document.getElementById('cat-fats-container').style.display = matchedCounts.fats > 0 ? 'block' : 'none';
-        }
+            // Нажатия на кнопки целей
+            ['lose', 'keep', 'gain'].forEach(goalId => {
+                const btn = document.getElementById(`btn-goal-${goalId}`);
+                attachClick(btn, () => setGoal(goalId, true));
+            });
 
-        // Функция интерактивного создания своего собственного продукта (Новое!)
-        function addCustomPlateFood() {
-            const nameInput = document.getElementById('custom-plate-name');
-            const sectorSelect = document.getElementById('custom-plate-sector');
-            const calsInput = document.getElementById('custom-plate-cals');
-
-            const name = nameInput.value.trim();
-            const sector = sectorSelect.value;
-            const cals = parseInt(calsInput.value);
-
-            if (!name) {
-                showNotification('Пожалуйста, введите название продукта!', 'error');
-                return;
-            }
-            if (isNaN(cals) || cals <= 0) {
-                showNotification('Введите корректную калорийность!', 'error');
-                return;
-            }
-
-            // Назначаем эмодзи в зависимости от выбранного сектора
-            let emoji = '🥗';
-            if (sector === 'protein') emoji = '🍗';
-            if (sector === 'carbs') emoji = '🍚';
-            if (sector === 'fats') emoji = '🥑';
-
-            const newFoodItem = {
-                name: name,
-                sector: sector,
-                emoji: emoji,
-                cals: cals,
-                p: sector === 'protein' ? 18 : (sector === 'fiber' ? 1 : 2),
-                f: sector === 'fats' ? 14 : (sector === 'protein' ? 4 : 0.5),
-                c: sector === 'carbs' ? 24 : (sector === 'fiber' ? 4 : 1)
-            };
-
-            // 1. Сохраняем в память телефона (Local Storage)
-            let savedCustom = localStorage.getItem('nutri_custom_plate_foods');
-            let customList = savedCustom ? JSON.parse(savedCustom) : [];
-            customList.push(newFoodItem);
-            localStorage.setItem('nutri_custom_plate_foods', JSON.stringify(customList));
-
-            // 2. Добавляем в текущую оперативную базу конструктора
-            constructorFoods.push(newFoodItem);
-
-            // 3. Автоматически кладем на тарелку
-            addIngredientToPlate(newFoodItem.name, newFoodItem.sector, newFoodItem.emoji, newFoodItem.cals, newFoodItem.p, newFoodItem.f, newFoodItem.c);
-
-            // Очищаем поля ввода
-            nameInput.value = '';
-            calsInput.value = '';
-
-            // Обновляем списки на экране
-            renderPlateIngredients();
-            showNotification(`Продукт "${name}" создан и добавлен на тарелку! ✨`);
-        }
-
-        function resetPlate() {
-            currentPlate = { fiber: 0, protein: 0, carbs: 0, fats: 0, calories: 0, items: [], emojis: [] };
-            
-            // Сбрасываем подцветку секторов
-            updateRingProgress('fiber', 0, 565.48);
-            updateRingProgress('protein', 0, 452.38);
-            updateRingProgress('carbs', 0, 339.29);
-
-            // Сбрасываем текст граммовок
-            document.getElementById('fiber-count').innerText = '0г';
-            document.getElementById('protein-count').innerText = '0г';
-            document.getElementById('carbs-count').innerText = '0г';
-
-            // Очищаем центральную тарелку
-            const centralPlate = document.getElementById('central-plate');
-            centralPlate.innerHTML = '<span id="plate-placeholder-icon" class="text-3xl">🍽️</span>';
-
-            updatePlateUI();
-        }
-
-        // Функция плавной анимации SVG кольца
-        function updateRingProgress(ringType, percentage, totalLength) {
-            const ring = document.getElementById(`ring-${ringType}`);
-            const offset = totalLength - (Math.min(100, percentage) / 100) * totalLength;
-            ring.style.strokeDashoffset = offset;
-        }
-
-        function addIngredientToPlate(name, sector, emoji, cals, p, f, c) {
-            const centralPlate = document.getElementById('central-plate');
-            const placeholder = document.getElementById('plate-placeholder-icon');
-            if (placeholder) {
-                centralPlate.innerHTML = '';
-            }
-
-            // Добавляем вес в сектор (порция по умолчанию 100г)
-            if (sector === 'fiber') {
-                currentPlate.fiber += 100;
-                const percent = Math.min(100, (currentPlate.fiber / 300) * 100);
-                updateRingProgress('fiber', percent, 565.48);
-                document.getElementById('fiber-count').innerText = currentPlate.fiber + 'г';
-            } else if (sector === 'protein') {
-                currentPlate.protein += 100;
-                const percent = Math.min(100, (currentPlate.protein / 200) * 100);
-                updateRingProgress('protein', percent, 452.38);
-                document.getElementById('protein-count').innerText = currentPlate.protein + 'г';
-            } else if (sector === 'carbs') {
-                currentPlate.carbs += 100;
-                const percent = Math.min(100, (currentPlate.carbs / 200) * 100);
-                updateRingProgress('carbs', percent, 339.29);
-                document.getElementById('carbs-count').innerText = currentPlate.carbs + 'г';
-            } else if (sector === 'fats') {
-                currentPlate.fats += 30; // Жиров берем поменьше порцию
-            }
-
-            currentPlate.calories += Math.round(cals);
-            if (!currentPlate.items.includes(name)) {
-                currentPlate.items.push(name);
+            // Пересчет графиков
+            function recalculateProgress() {
+                const calPct = Math.min(100, Math.round((todayCalories / profile.calorieGoal) * 100)) || 0;
+                if (caloriesCurrent) caloriesCurrent.innerText = todayCalories;
                 
-                // Добавляем эмодзи на виртуальную тарелку
-                const emojiSpan = document.createElement('span');
-                emojiSpan.className = 'text-2xl animate-pulse';
-                emojiSpan.innerText = emoji;
-                centralPlate.appendChild(emojiSpan);
-                setTimeout(() => emojiSpan.classList.remove('animate-pulse'), 500);
+                const trCalSum = document.getElementById('tracker-calories-sum');
+                if (trCalSum) trCalSum.innerText = todayCalories;
+                
+                if (caloriesProgressBar) caloriesProgressBar.style.width = calPct + '%';
+
+                const waterPct = Math.min(100, Math.round((todayWater / profile.waterGoal) * 100)) || 0;
+                if (waterCurrent) waterCurrent.innerText = todayWater;
+                if (waterProgressBar) waterProgressBar.style.width = waterPct + '%';
+
+                const stepsPct = Math.min(100, Math.round((todaySteps / 10000) * 100)) || 0;
+                if (stepsCurrent) stepsCurrent.innerText = todaySteps;
+                if (stepsProgressBar) stepsProgressBar.style.width = stepsPct + '%';
+
+                if (activityBurned) activityBurned.innerText = Math.round(todaySteps * 0.045);
             }
 
-            updatePlateUI();
-            showNotification(`Добавлено на тарелку: ${name} ${emoji}`);
-        }
+            // Кнопки быстрой активности
+            function addWater() {
+                todayWater = Math.min(4000, todayWater + 250);
+                recalculateProgress();
+                saveToStorage();
+                showNotification('Выпито +250 мл чистой воды 💧', 'blue');
+            }
+            attachClick(document.getElementById('quick-water-btn'), addWater);
 
-        function updatePlateUI() {
-            document.getElementById('plate-calories').innerText = `${currentPlate.calories} ккал`;
+            function addSteps() {
+                todaySteps = Math.min(30000, todaySteps + 2000);
+                recalculateProgress();
+                saveToStorage();
+                showNotification('Добавлено +2000 шагов 🏃‍♂️', 'success');
+            }
+            attachClick(document.getElementById('quick-steps-btn'), addSteps);
+
+
+            // ================= ЛОГИКА СМАРТ-КОНСТРУКТОРА ТАРЕЛКИ =================
+
+            function openPlateConstructor() {
+                if (plateModal) {
+                    plateModal.classList.remove('hidden');
+                }
+                renderPlateIngredients(); 
+            }
+            attachClick(document.getElementById('open-plate-modal-btn'), openPlateConstructor);
+
+            function closePlateConstructor() {
+                if (plateModal) {
+                    plateModal.classList.add('hidden');
+                }
+            }
+            attachClick(document.getElementById('close-plate-modal-btn'), closePlateConstructor);
+
+            function updateRingProgress(ringType, percentage, totalLength) {
+                const ring = document.getElementById(`ring-${ringType}`);
+                if (ring) {
+                    const offset = totalLength - (Math.min(100, percentage) / 100) * totalLength;
+                    ring.style.strokeDashoffset = offset;
+                }
+            }
+
+            function updatePlateUI() {
+                const plateCals = document.getElementById('plate-calories');
+                if (plateCals) plateCals.innerText = `${currentPlate.calories} ккал`;
+                
+                let totalB = Math.round(currentPlate.protein * 0.18 + currentPlate.fiber * 0.02 + currentPlate.carbs * 0.04);
+                let totalJ = Math.round(currentPlate.fats * 0.5 + currentPlate.protein * 0.05);
+                let totalU = Math.round(currentPlate.carbs * 0.25 + currentPlate.fiber * 0.03);
+
+                const plateMacros = document.getElementById('plate-macros');
+                if (plateMacros) plateMacros.innerText = `Б: ${totalB}г | Ж: ${totalJ}г | У: ${totalU}г`;
+
+                const ratingLabel = document.getElementById('plate-rating');
+                if (ratingLabel) {
+                    if (currentPlate.items.length === 0) {
+                        ratingLabel.innerText = "Соберите тарелку";
+                        ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-wider";
+                        return;
+                    }
+
+                    const hasFiber = currentPlate.fiber > 0;
+                    const hasProtein = currentPlate.protein > 0;
+                    const hasCarbs = currentPlate.carbs > 0;
+
+                    if (hasFiber && hasProtein && hasCarbs) {
+                        ratingLabel.innerText = "Идеальный баланс! Оценка: A+ 👑";
+                        ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-wider";
+                    } else if (hasFiber && hasProtein) {
+                        ratingLabel.innerText = "Низкоуглеводный баланс. Оценка: A";
+                        ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-teal-500/20 text-teal-400 text-[10px] font-black uppercase tracking-wider";
+                    } else if (hasProtein && hasCarbs) {
+                        ratingLabel.innerText = "Мало клетчатки! Оценка: B- ⚠️";
+                        ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-black uppercase tracking-wider";
+                    } else {
+                        ratingLabel.innerText = "Не сбалансировано. Оценка: C";
+                        ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-wider";
+                    }
+                }
+            }
+
+            function addIngredientToPlate(name, sector, emoji, cals, p, f, c) {
+                const centralPlate = document.getElementById('central-plate');
+                const placeholder = document.getElementById('plate-placeholder-icon');
+                if (placeholder && centralPlate) {
+                    centralPlate.innerHTML = '';
+                }
+
+                if (sector === 'fiber') {
+                    currentPlate.fiber += 100;
+                    const percent = Math.min(100, (currentPlate.fiber / 300) * 100);
+                    updateRingProgress('fiber', percent, 565.48);
+                    const el = document.getElementById('fiber-count');
+                    if (el) el.innerText = currentPlate.fiber + 'г';
+                } else if (sector === 'protein') {
+                    currentPlate.protein += 100;
+                    const percent = Math.min(100, (currentPlate.protein / 200) * 100);
+                    updateRingProgress('protein', percent, 452.38);
+                    const el = document.getElementById('protein-count');
+                    if (el) el.innerText = currentPlate.protein + 'г';
+                } else if (sector === 'carbs') {
+                    currentPlate.carbs += 100;
+                    const percent = Math.min(100, (currentPlate.carbs / 200) * 100);
+                    updateRingProgress('carbs', percent, 339.29);
+                    const el = document.getElementById('carbs-count');
+                    if (el) el.innerText = currentPlate.carbs + 'г';
+                } else if (sector === 'fats') {
+                    currentPlate.fats += 30; 
+                }
+
+                currentPlate.calories += Math.round(cals);
+                if (!currentPlate.items.includes(name)) {
+                    currentPlate.items.push(name);
+                    
+                    const emojiSpan = document.createElement('span');
+                    emojiSpan.className = 'text-2xl animate-pulse';
+                    emojiSpan.innerText = emoji;
+                    if (centralPlate) {
+                        centralPlate.appendChild(emojiSpan);
+                    }
+                    setTimeout(() => emojiSpan.classList.remove('animate-pulse'), 500);
+                }
+
+                updatePlateUI();
+                showNotification(`Добавлено на тарелку: ${name} ${emoji}`);
+            }
+
+            // Экспортируем в глобальную область, так как генерация кнопок происходит динамически
+            window.addIngredientToPlate = addIngredientToPlate;
+
+            function renderPlateIngredients() {
+                const searchEl = document.getElementById('plate-search');
+                const searchQuery = searchEl ? searchEl.value.toLowerCase().trim() : '';
+                
+                const fiberList = document.getElementById('container-fiber-list');
+                const proteinList = document.getElementById('container-protein-list');
+                const carbsList = document.getElementById('container-carbs-list');
+                const fatsList = document.getElementById('container-fats-list');
+
+                if (fiberList) fiberList.innerHTML = '';
+                if (proteinList) proteinList.innerHTML = '';
+                if (carbsList) carbsList.innerHTML = '';
+                if (fatsList) fatsList.innerHTML = '';
+
+                let matchedCounts = { fiber: 0, protein: 0, carbs: 0, fats: 0 };
+
+                constructorFoods.forEach(food => {
+                    if (searchQuery && !food.name.toLowerCase().includes(searchQuery)) {
+                        return; 
+                    }
+
+                    matchedCounts[food.sector]++;
+
+                    const buttonHTML = `
+                        <button onclick="addIngredientToPlate('${food.name}', '${food.sector}', '${food.emoji}', ${food.cals}, ${food.p}, ${food.f}, ${food.c})" class="active-scale text-left p-2.5 bg-slate-900 hover:bg-slate-850 border border-slate-800 rounded-xl text-[10px] font-bold flex items-center gap-1.5 w-full transition-all">
+                            <span class="text-base">${food.emoji}</span>
+                            <span class="truncate flex-1">${food.name}</span>
+                            <span class="text-[8px] opacity-75 ${food.sector === 'fiber' ? 'text-emerald-400' : food.sector === 'protein' ? 'text-orange-400' : food.sector === 'carbs' ? 'text-amber-400' : 'text-yellow-500'}">+100г</span>
+                        </button>
+                    `;
+
+                    if (food.sector === 'fiber' && fiberList) fiberList.innerHTML += buttonHTML;
+                    else if (food.sector === 'protein' && proteinList) proteinList.innerHTML += buttonHTML;
+                    else if (food.sector === 'carbs' && carbsList) carbsList.innerHTML += buttonHTML;
+                    else if (food.sector === 'fats' && fatsList) fatsList.innerHTML += buttonHTML;
+                });
+
+                const catFiber = document.getElementById('cat-fiber-container');
+                if (catFiber) catFiber.style.display = matchedCounts.fiber > 0 ? 'block' : 'none';
+                
+                const catProtein = document.getElementById('cat-protein-container');
+                if (catProtein) catProtein.style.display = matchedCounts.protein > 0 ? 'block' : 'none';
+                
+                const catCarbs = document.getElementById('cat-carbs-container');
+                if (catCarbs) catCarbs.style.display = matchedCounts.carbs > 0 ? 'block' : 'none';
+                
+                const catFats = document.getElementById('cat-fats-container');
+                if (catFats) catFats.style.display = matchedCounts.fats > 0 ? 'block' : 'none';
+            }
+
+            const plateSearch = document.getElementById('plate-search');
+            if (plateSearch) {
+                plateSearch.addEventListener('input', renderPlateIngredients);
+            }
+
+            function addCustomPlateFood() {
+                const nameInput = document.getElementById('custom-plate-name');
+                const sectorSelect = document.getElementById('custom-plate-sector');
+                const calsInput = document.getElementById('custom-plate-cals');
+
+                const name = nameInput ? nameInput.value.trim() : '';
+                const sector = sectorSelect ? sectorSelect.value : 'fiber';
+                const cals = calsInput ? parseInt(calsInput.value) : 0;
+
+                if (!name) {
+                    showNotification('Пожалуйста, введите название продукта!', 'error');
+                    return;
+                }
+                if (isNaN(cals) || cals <= 0) {
+                    showNotification('Введите корректную калорийность!', 'error');
+                    return;
+                }
+
+                let emoji = '🥗';
+                if (sector === 'protein') emoji = '🍗';
+                if (sector === 'carbs') emoji = '🍚';
+                if (sector === 'fats') emoji = '🥑';
+
+                const newFoodItem = {
+                    name: name,
+                    sector: sector,
+                    emoji: emoji,
+                    cals: cals,
+                    p: sector === 'protein' ? 18 : (sector === 'fiber' ? 1 : 2),
+                    f: sector === 'fats' ? 14 : (sector === 'protein' ? 4 : 0.5),
+                    c: sector === 'carbs' ? 24 : (sector === 'fiber' ? 4 : 1)
+                };
+
+                let savedCustom = localStorage.getItem('nutri_custom_plate_foods');
+                let customList = savedCustom ? JSON.parse(savedCustom) : [];
+                customList.push(newFoodItem);
+                localStorage.setItem('nutri_custom_plate_foods', JSON.stringify(customList));
+
+                constructorFoods.push(newFoodItem);
+
+                addIngredientToPlate(newFoodItem.name, newFoodItem.sector, newFoodItem.emoji, newFoodItem.cals, newFoodItem.p, newFoodItem.f, newFoodItem.c);
+
+                if (nameInput) nameInput.value = '';
+                if (calsInput) calsInput.value = '';
+
+                renderPlateIngredients();
+                showNotification(`Продукт "${name}" создан и добавлен на тарелку! ✨`);
+            }
+            attachClick(document.getElementById('add-custom-food-btn'), addCustomPlateFood);
+
+            function resetPlate() {
+                currentPlate = { fiber: 0, protein: 0, carbs: 0, fats: 0, calories: 0, items: [], emojis: [] };
+                
+                updateRingProgress('fiber', 0, 565.48);
+                updateRingProgress('protein', 0, 452.38);
+                updateRingProgress('carbs', 0, 339.29);
+
+                const fibC = document.getElementById('fiber-count');
+                if (fibC) fibC.innerText = '0г';
+                const protC = document.getElementById('protein-count');
+                if (protC) protC.innerText = '0г';
+                const carbC = document.getElementById('carbs-count');
+                if (carbC) carbC.innerText = '0г';
+
+                const centralPlate = document.getElementById('central-plate');
+                if (centralPlate) {
+                    centralPlate.innerHTML = '<span id="plate-placeholder-icon" class="text-3xl">🍽️</span>';
+                }
+
+                updatePlateUI();
+            }
+            attachClick(document.getElementById('reset-plate-btn'), resetPlate);
+
+            function eatPlate() {
+                if (currentPlate.items.length === 0) {
+                    alert("Сначала добавьте хотя бы один ингредиент на тарелку!");
+                    return;
+                }
+
+                const dishName = `Тарелка: ${currentPlate.items.slice(0, 3).join(' + ')}` + (currentPlate.items.length > 3 ? '...' : '');
+                
+                meals.push({
+                    id: Date.now(),
+                    type: 'Обед',
+                    name: dishName,
+                    calories: currentPlate.calories
+                });
+                todayCalories += currentPlate.calories;
+
+                saveToStorage();
+                renderMeals();
+                recalculateProgress();
+                closePlateConstructor();
+                resetPlate();
+
+                showNotification('Тарелка здоровья успешно добавлена в Дневник! 🥗🍽️');
+                switchTab('tracker');
+            }
+            attachClick(document.getElementById('eat-plate-btn'), eatPlate);
+
+
+            // ================= ЛОГИКА ДНЕВНИКА ПИТАНИЯ =================
+
+            function toggleAddMealForm() {
+                const form = document.getElementById('add-meal-form');
+                if (form) {
+                    form.classList.toggle('hidden');
+                }
+            }
+            attachClick(document.getElementById('add-meal-toggle-btn'), toggleAddMealForm);
+
+            function setNewMealType(type) {
+                currentNewMealType = type;
+                const ruTypes = { breakfast: 'Завтрак', lunch: 'Обед', dinner: 'Ужин', snack: 'Перекус' };
+                Object.keys(ruTypes).forEach(t => {
+                    const btn = document.getElementById(`type-${t}-btn`);
+                    if (btn) {
+                        btn.className = (ruTypes[t] === type)
+                            ? "active-scale type-btn py-1 rounded bg-emerald-500 text-white text-[9px] font-bold"
+                            : "active-scale type-btn py-1 rounded bg-slate-800 text-slate-400 text-[9px] font-bold";
+                    }
+                });
+            }
             
-            // Расчет БЖУ
-            let totalB = Math.round(currentPlate.protein * 0.18 + currentPlate.fiber * 0.02 + currentPlate.carbs * 0.04);
-            let totalJ = Math.round(currentPlate.fats * 0.5 + currentPlate.protein * 0.05);
-            let totalU = Math.round(currentPlate.carbs * 0.25 + currentPlate.fiber * 0.03);
+            attachClick(document.getElementById('type-breakfast-btn'), () => setNewMealType('Завтрак'));
+            attachClick(document.getElementById('type-lunch-btn'), () => setNewMealType('Обед'));
+            attachClick(document.getElementById('type-dinner-btn'), () => setNewMealType('Ужин'));
+            attachClick(document.getElementById('type-snack-btn'), () => setNewMealType('Перекус'));
 
-            document.getElementById('plate-macros').innerText = `Б: ${totalB}г | Ж: ${totalJ}г | У: ${totalU}г`;
+            function saveMeal() {
+                const nameEl = document.getElementById('new-meal-name');
+                const calsEl = document.getElementById('new-meal-calories');
+                const name = nameEl ? nameEl.value.trim() : '';
+                const cals = calsEl ? parseInt(calsEl.value) : 0;
 
-            // Умная оценка баланса тарелки
-            const ratingLabel = document.getElementById('plate-rating');
-            
-            if (currentPlate.items.length === 0) {
-                ratingLabel.innerText = "Соберите тарелку";
-                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-slate-800 text-slate-400 text-[10px] font-black uppercase tracking-wider";
-                return;
+                if (!name || isNaN(cals)) return alert('Заполните данные!');
+
+                meals.push({ id: Date.now(), type: currentNewMealType, name, calories: cals });
+                todayCalories += cals;
+
+                if (nameEl) nameEl.value = '';
+                if (calsEl) calsEl.value = '';
+                toggleAddMealForm();
+                
+                renderMeals();
+                recalculateProgress();
+                saveToStorage();
+                showNotification(`Добавлено блюдо: ${name} 🍽️`);
+            }
+            attachClick(document.getElementById('save-meal-btn'), saveMeal);
+            attachClick(document.getElementById('cancel-meal-btn'), toggleAddMealForm);
+
+            function deleteMeal(id, cals) {
+                const item = meals.find(m => m.id === id);
+                meals = meals.filter(m => m.id !== id);
+                todayCalories = Math.max(0, todayCalories - cals);
+                renderMeals();
+                recalculateProgress();
+                saveToStorage();
+                if (item) showNotification(`Удалено: ${item.name} 🗑️`, 'blue');
+            }
+            window.deleteMeal = deleteMeal;
+
+            function renderMeals() {
+                const list = document.getElementById('meals-list');
+                if (!list) return;
+                list.innerHTML = '';
+                
+                const mCount = document.getElementById('meals-count');
+                if (mCount) mCount.innerText = meals.length;
+
+                meals.forEach(meal => {
+                    let cl = (meal.type === 'Завтрак') ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
+                             (meal.type === 'Обед') ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                             (meal.type === 'Ужин') ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
+                                                      'bg-purple-500/10 text-purple-400 border-purple-500/20';
+
+                    list.innerHTML += `
+                        <div class="bg-slate-800/30 border border-slate-800 p-3 rounded-xl flex items-center justify-between">
+                          <div class="flex items-center gap-2">
+                            <span class="px-2 py-0.5 rounded text-[8px] font-black uppercase border ${cl}">${meal.type}</span>
+                            <div>
+                              <span class="block text-xs font-bold text-white">${meal.name}</span>
+                              <span class="block text-[9px] text-slate-400">${meal.calories} ккал</span>
+                            </div>
+                          </div>
+                          <button onclick="deleteMeal(${meal.id}, ${meal.calories})" class="text-slate-500 hover:text-red-400 px-1"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                    </div>
+                    `;
+                });
             }
 
-            // Логика золотого сечения Гарвардской тарелки
-            const hasFiber = currentPlate.fiber > 0;
-            const hasProtein = currentPlate.protein > 0;
-            const hasCarbs = currentPlate.carbs > 0;
 
-            if (hasFiber && hasProtein && hasCarbs) {
-                ratingLabel.innerText = "Идеальный баланс! Оценка: A+ 👑";
-                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 text-[10px] font-black uppercase tracking-wider";
-            } else if (hasFiber && hasProtein) {
-                ratingLabel.innerText = "Низкоуглеводный баланс. Оценка: A";
-                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-teal-500/20 text-teal-400 text-[10px] font-black uppercase tracking-wider";
-            } else if (hasProtein && hasCarbs) {
-                ratingLabel.innerText = "Мало клетчатки! Оценка: B- ⚠️";
-                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-black uppercase tracking-wider";
-            } else {
-                ratingLabel.innerText = "Не сбалансировано. Оценка: C";
-                ratingLabel.className = "inline-block px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-[10px] font-black uppercase tracking-wider";
+            // ================= ЛОГИКА ИИ-ХОЛОДИЛЬНИКА =================
+
+            function renderIngredients() {
+                const container = document.getElementById('ingredients-container');
+                const badge = document.getElementById('fridge-badge');
+                if (!container) return;
+                
+                if (fridgeIngredients.length === 0) {
+                    container.innerHTML = `<span class="text-[9px] text-slate-500 italic m-auto">Холодильник пуст...</span>`;
+                    if (badge) badge.classList.add('hidden');
+                    return;
+                }
+
+                if (badge) badge.classList.remove('hidden');
+                container.innerHTML = '';
+                fridgeIngredients.forEach((ing, index) => {
+                    container.innerHTML += `
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-800 text-slate-200 rounded-xl text-[10px] font-bold border border-slate-700">
+                            ${ing}
+                            <button onclick="removeIngredient(${index})" class="text-slate-400 hover:text-red-400 text-[10px] focus:outline-none">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                            </button>
+                        </span>
+                    `;
+                });
             }
-        }
 
-        function eatPlate() {
-            if (currentPlate.items.length === 0) {
-                alert("Сначала добавьте хотя бы один ингредиент на тарелку!");
-                return;
+            function addCustomIngredient() {
+                const input = document.getElementById('ingredient-input');
+                const val = input ? input.value.trim() : '';
+                if (!val) return;
+
+                if (!fridgeIngredients.includes(val)) {
+                    fridgeIngredients.push(val);
+                    saveToStorage();
+                    renderIngredients();
+                    showNotification(`Продукт "${val}" добавлен в холодильник 🥦`);
+                }
+                if (input) input.value = '';
+            }
+            attachClick(document.getElementById('add-fridge-item-btn'), addCustomIngredient);
+
+            function toggleFastIngredient(ingName) {
+                const idx = fridgeIngredients.indexOf(ingName);
+                if (idx === -1) {
+                    fridgeIngredients.push(ingName);
+                    showNotification(`Добавлено: ${ingName} 🥗`);
+                } else {
+                    fridgeIngredients.splice(idx, 1);
+                    showNotification(`Убрано: ${ingName} ❌`, 'blue');
+                }
+                saveToStorage();
+                renderIngredients();
             }
 
-            const dishName = `Тарелка: ${currentPlate.items.slice(0, 3).join(' + ')}` + (currentPlate.items.length > 3 ? '...' : '');
-            
-            meals.push({
-                id: Date.now(),
-                type: 'Обед',
-                name: dishName,
-                calories: currentPlate.calories
+            document.querySelectorAll('.fast-click-item').forEach(button => {
+                attachClick(button, () => {
+                    const itemName = button.getAttribute('data-item');
+                    toggleFastIngredient(itemName);
+                });
             });
-            todayCalories += currentPlate.calories;
 
-            saveToStorage();
-            renderMeals();
-            recalculateProgress();
-            closePlateConstructor();
-            resetPlate();
-
-            showNotification('Тарелка здоровья успешно добавлена в Дневник! 🥗🍽️');
-            switchTab('tracker');
-        }
-
-        // ИИ-КОНСТРУКТОР МЕНЮ
-        function generateAiMenu() {
-            const box = document.getElementById('generated-menu-box');
-            box.classList.remove('hidden');
-            
-            const chatBox = document.getElementById('chat-box');
-            addChatMessage("🤖 ИИ-Конструктор: Сгенерировал рацион на день с учетом вашего КБЖУ. Приятного аппетита!", "ai");
-            showNotification('Суточный рацион рассчитан! 🍽️');
-        }
-
-        // Чат ассистент
-        function sendMessage() {
-            const input = document.getElementById('chat-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            addChatMessage(text, 'user');
-            input.value = '';
-
-            setTimeout(() => {
-                addChatMessage("Принято! Отличный выбор продуктов. Сбалансированный подход к еде и своевременный учет шагов гарантируют быстрый разгон метаболизма. Нужна корректировка рецепта?", "ai");
-                showNotification('Новый ответ от ИИ-Помощника 💬', 'blue');
-            }, 2000);
-        }
-
-        function addChatMessage(text, role) {
-            const box = document.getElementById('chat-box');
-            if(role === 'user') {
-                box.innerHTML += `<div class="flex gap-2 max-w-[85%] ml-auto justify-end"><div class="bg-emerald-500 text-white p-2.5 rounded-2xl rounded-tr-none text-[10px] leading-relaxed shadow">${text}</div></div>`;
-            } else {
-                box.innerHTML += `<div class="flex gap-2 max-w-[85%]"><div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs"><i class="fa-solid fa-apple-whole"></i></div><div class="bg-slate-800/80 text-slate-100 p-2.5 rounded-2xl rounded-tl-none text-[10px] border border-slate-800">${text}</div></div>`;
+            function removeIngredient(index) {
+                const removed = fridgeIngredients[index];
+                fridgeIngredients.splice(index, 1);
+                saveToStorage();
+                renderIngredients();
+                showNotification(`Удалено из холодильника: ${removed} 🗑️`, 'blue');
             }
-            box.scrollTop = box.scrollHeight;
-        }
+            window.removeIngredient = removeIngredient;
 
-        // Кастомное модальное окно сброса дня
-        function showResetModal() {
-            document.getElementById('confirm-modal').classList.remove('hidden');
-        }
+            function cookRecipe(title, calories) {
+                meals.push({
+                    id: Date.now(),
+                    type: 'Обед',
+                    name: `ИИ-Холодильник: ${title}`,
+                    calories: calories
+                });
+                todayCalories += calories;
+                
+                saveToStorage();
+                renderMeals();
+                recalculateProgress();
+                
+                showNotification(`Приготовлено: ${title}! 🍳`);
+                switchTab('tracker');
+            }
+            window.cookRecipe = cookRecipe;
 
-        function hideResetModal() {
-            document.getElementById('confirm-modal').classList.add('hidden');
-        }
+            function findFridgeRecipes() {
+                if (fridgeIngredients.length === 0) {
+                    alert('Сначала добавьте хотя бы один продукт в холодильник!');
+                    return;
+                }
 
-        function confirmReset() {
-            localStorage.clear();
-            profile = {...defaultProfile};
-            todayCalories = 0;
-            todayWater = 0;
-            todaySteps = 0;
-            meals = [];
-            fridgeIngredients = ['Яйца', 'Курица', 'Томаты'];
-            // Сбрасываем кастомные продукты
-            localStorage.removeItem('nutri_custom_plate_foods');
-            
-            // Сбрасываем к базовому набору продуктов
-            constructorFoods = constructorFoods.filter(f => !f.isCustom);
+                const output = document.getElementById('fridge-recipes-output');
+                if (!output) return;
+                
+                output.innerHTML = `
+                    <div class="p-6 text-center text-xs text-slate-400 space-y-2 animate-pulse">
+                        <i class="fa-solid fa-kitchen-set text-2xl text-emerald-400 animate-bounce"></i>
+                        <p class="font-bold">ИИ составляет рецепты...</p>
+                        <p class="text-[9px]">Анализируем продукты в вашем холодильнике</p>
+                    </div>
+                `;
+                output.classList.remove('hidden');
 
-            hideResetModal();
-            loadFromStorage();
-            showNotification('Приложение сброшено до начальных настроек 🔄', 'blue');
-        }
+                setTimeout(() => {
+                    output.innerHTML = '';
+                    const lowerIngredients = fridgeIngredients.map(i => i.toLowerCase());
 
-        window.onload = () => {
+                    const recipeDatabase = [
+                        {
+                            title: "🍳 Пышный омлет «Нутри-Макс»",
+                            required: ["яйца"],
+                            optional: ["молоко", "томаты", "сыр", "лук"],
+                            time: "8 мин",
+                            level: "Легко",
+                            baseCals: 150,
+                            getDesc: (has) => `Нежнейший белковый омлет, приготовленный из ваших продуктов: ${has.join(', ')}.`,
+                            getSteps: (has) => `1. Взбейте яйца ${has.includes('молоко') ? 'с молоком' : 'с каплей воды'}. ${has.includes('лук') || has.includes('томаты') ? '2. Припустите нарезанные лук и томаты на сковороде 2 минуты.' : ''} 3. Вылейте яичную смесь на сковороду. ${has.includes('сыр') ? 'Посыпьте тертым сыром перед подачей.' : 'Готовьте под крышкой 5 минут.'}`
+                        },
+                        {
+                            title: "🍚 Домашний плов с нежной курочкой",
+                            required: ["курица", "рис"],
+                            optional: ["лук", "томаты"],
+                            time: "25 мин",
+                            level: "Средне",
+                            baseCals: 380,
+                            getDesc: (has) => `Сытное и богатое сложными углеводами блюдо из риса и курицы с добавлением ${has.filter(i => i !== 'курица' && i !== 'рис').join(', ')}.`,
+                            getSteps: (has) => `1. Нарежьте куриное филе кусочками и обжарьте ${has.includes('лук') ? 'с луком' : ''} до золотистой корочки. 2. Добавьте промытый рис, залейте водой в пропорции 1:2. ${has.includes('томаты') ? 'Положите кубики томатов для сочности.' : ''} 3. Тушите под закрытой крышкой на медленном огне до полного впитывания воды (15-20 минут).`
+                        },
+                        {
+                            title: "🥗 Итальянский теплый салат",
+                            required: ["томаты"],
+                            optional: ["огурец", "сыр", "лук", "курица"],
+                            time: "10 мин",
+                            level: "Легко",
+                            baseCals: 120,
+                            getDesc: (has) => `Свежий, хрустящий салат на основе томатов. Вы добавили в него: ${has.join(', ')}.`,
+                            getSteps: (has) => `1. Нарежьте томаты кубиками ${has.includes('огурец') ? 'и добавьте свежий огурец' : ''}. ${has.includes('курица') ? '2. Добавьте слайсы теплой обжаренной грудки.' : ''} 3. Смешайте ингредиенты, посыпьте ${has.includes('сыр') ? 'тертым сыром' : 'зеленью'} и заправьте чайной ложкой оливкового масла.`
+                        },
+                        {
+                            title: "🍲 Быстрый рисовый суп-пюре",
+                            required: ["рис", "курица"],
+                            optional: ["лук", "молоко"],
+                            time: "20 мин",
+                            level: "Легко",
+                            baseCals: 290,
+                            getDesc: (has) => `Легкий диетический суп из ваших запасов: ${has.join(', ')}.`,
+                            getSteps: (has) => `1. Отварите рис и куриное филе в небольшом количестве воды. ${has.includes('лук') ? '2. Добавьте пассерованный лук.' : ''} 3. Измельчите всё блендером до состояния пюре ${has.includes('молоко') ? ', влив немного молока для сливочного вкуса.' : '.'}`
+                        },
+                        {
+                            title: "🥞 Нежные молочные блины",
+                            required: ["молоко", "яйца"],
+                            optional: [],
+                            time: "15 мин",
+                            level: "Средне",
+                            baseCals: 210,
+                            getDesc: (has) => `Классический рецепт домашних блинчиков на молоке и яйцах.`,
+                            getSteps: (has) => `1. Взбейте яйца с молоком и щепоткой соли (при наличии добавьте 2 ложки муки). 2. Выпекайте на хорошо разогретой сковороде по 1 минуте с каждой стороны.`
+                        }
+                    ];
+
+                    let matchedRecipes = [];
+
+                    recipeDatabase.forEach(recipe => {
+                        const hasAllRequired = recipe.required.every(req => lowerIngredients.includes(req));
+                        
+                        if (hasAllRequired) {
+                            const matchedOptional = recipe.optional.filter(opt => lowerIngredients.includes(opt));
+                            const allUsed = [...recipe.required, ...matchedOptional];
+                            let finalCals = recipe.baseCals + (matchedOptional.length * 40);
+
+                            matchedRecipes.push({
+                                title: recipe.title,
+                                time: recipe.time,
+                                level: recipe.level,
+                                calories: finalCals,
+                                desc: recipe.getDesc(allUsed),
+                                steps: recipe.getSteps(allUsed)
+                            });
+                        }
+                    });
+
+                    if (matchedRecipes.length === 0) {
+                        const itemsText = fridgeIngredients.join(', ');
+                        matchedRecipes.push({
+                            title: "🥗 Полезный ИИ-Микс «Сытый день»",
+                            time: "12 мин",
+                            level: "Легко",
+                            calories: 220,
+                            desc: `Эксклюзивное экспресс-блюдо из всех ваших продуктов: ${itemsText}.`,
+                            steps: `1. Подготовьте и измельчите ваши ингредиенты: ${itemsText}. 2. Прогрейте или смешайте их в глубокой посуде. 3. Заправьте любимыми специями и ложкой масла. Сбалансированный состав готов!`
+                        });
+                    }
+
+                    matchedRecipes.forEach(rec => {
+                        output.innerHTML += `
+                            <div class="bg-slate-800/80 border border-slate-700 p-4 rounded-2xl space-y-2.5 animate-slideDown">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <span class="text-[8px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-bold uppercase">${rec.level} | ${rec.time}</span>
+                                        <h4 class="text-xs font-extrabold text-white mt-1.5">${rec.title}</h4>
+                                    </div>
+                                    <span class="text-[11px] font-black text-emerald-400">${rec.calories} ккал</span>
+                                </div>
+                                <p class="text-[10px] text-slate-300 italic">${rec.desc}</p>
+                                <div class="p-2 bg-slate-900/40 rounded-xl border border-slate-800 text-[9px] text-slate-400 leading-relaxed">
+                                    <span class="font-bold text-slate-200 block mb-1">Рецепт:</span>
+                                    ${rec.steps}
+                                </div>
+                                <button onclick="cookRecipe('${rec.title}', ${rec.calories})" class="active-scale w-full bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-white py-1.5 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-utensils"></i> Я приготовил это! (+${rec.calories} ккал)
+                                </button>
+                            </div>
+                        `;
+                    });
+
+                    showNotification('Рецепты успешно составлены ИИ! 🪄');
+                }, 1200);
+            }
+            attachClick(document.getElementById('find-recipes-btn'), findFridgeRecipes);
+
+
+            // ================= ЛОГИКА ИИ-ДИЕТОЛОГА & ЧАТА =================
+
+            function generateAiMenu() {
+                const box = document.getElementById('generated-menu-box');
+                if (box) {
+                    box.classList.remove('hidden');
+                }
+                addChatMessage("🤖 ИИ-Конструктор: Сгенерировал рацион на день с учетом вашего КБЖУ. Приятного аппетита!", "ai");
+                showNotification('Суточный рацион рассчитан! 🍽️');
+            }
+            attachClick(document.getElementById('generate-menu-btn'), generateAiMenu);
+
+            function sendMessage() {
+                const input = document.getElementById('chat-input');
+                const text = input ? input.value.trim() : '';
+                if (!text) return;
+
+                addChatMessage(text, 'user');
+                if (input) input.value = '';
+
+                setTimeout(() => {
+                    addChatMessage("Принято! Отличный выбор продуктов. Сбалансированный подход к еде и своевременный учет шагов гарантируют быстрый разгон метаболизма. Нужна корректировка рецепта?", "ai");
+                    showNotification('Новый ответ от ИИ-Помощника 💬', 'blue');
+                }, 2000);
+            }
+            attachClick(document.getElementById('send-chat-btn'), sendMessage);
+
+            function addChatMessage(text, role) {
+                const box = document.getElementById('chat-box');
+                if (!box) return;
+                if (role === 'user') {
+                    box.innerHTML += `<div class="flex gap-2 max-w-[85%] ml-auto justify-end"><div class="bg-emerald-500 text-white p-2.5 rounded-2xl rounded-tr-none text-[10px] leading-relaxed shadow">${text}</div></div>`;
+                } else {
+                    box.innerHTML += `<div class="flex gap-2 max-w-[85%]"><div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs"><i class="fa-solid fa-apple-whole"></i></div><div class="bg-slate-800/80 text-slate-100 p-2.5 rounded-2xl rounded-tl-none text-[10px] border border-slate-800">${text}</div></div>`;
+                }
+                box.scrollTop = box.scrollHeight;
+            }
+
+
+            // ================= ЛОГИКА КАСТОМНЫХ МОДАЛОК =================
+
+            function showResetModal() {
+                if (confirmModal) confirmModal.classList.remove('hidden');
+            }
+            attachClick(document.getElementById('header-reset-btn'), showResetModal);
+
+            function hideResetModal() {
+                if (confirmModal) confirmModal.classList.add('hidden');
+            }
+            attachClick(document.getElementById('modal-cancel-btn'), hideResetModal);
+
+            function confirmReset() {
+                localStorage.clear();
+                profile = {...defaultProfile};
+                todayCalories = 0;
+                todayWater = 0;
+                todaySteps = 0;
+                meals = [];
+                fridgeIngredients = ['Яйца', 'Курица', 'Томаты'];
+                
+                localStorage.removeItem('nutri_custom_plate_foods');
+                constructorFoods = constructorFoods.filter(f => !f.isCustom);
+
+                hideResetModal();
+                loadFromStorage();
+                renderMeals();
+                showNotification('Приложение сброшено до начальных настроек 🔄', 'blue');
+            }
+            attachClick(document.getElementById('modal-confirm-btn'), confirmReset);
+
+
+            // Запуск инициализации при старте
             loadFromStorage();
             renderMeals();
-            renderPlateIngredients(); // Отрисовка списков при первом запуске
-        };
+            renderPlateIngredients();
+        });
     </script>
 </body>
 </html>
